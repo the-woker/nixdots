@@ -4,7 +4,6 @@
 }:
 {
   programs.virt-manager.enable = true;
-
   users.groups.libvirtd.members = [ "${name}" ];
 
   virtualisation.libvirtd.enable = true;

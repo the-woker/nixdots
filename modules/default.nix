@@ -24,6 +24,5 @@
   # Optional shared args for all modules
 
   nixpkgs.overlays = [
-    inputs.nur.overlays.default
   ];
 }

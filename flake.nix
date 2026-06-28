@@ -9,10 +9,6 @@
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
 
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -109,7 +105,6 @@
               users.users.nick.initialPassword = "nixos";
             }
 
-            # THIS is what enables proper VM behavior
             {
               virtualisation.vmVariant = {
                 virtualisation.forwardPorts = [
