@@ -52,6 +52,9 @@
       }
 
 
+
+      bindkey -s '^E' 'y\n'
+
       eval "$(starship init zsh)"
       eval "$(zoxide init zsh)"
       eval "$(direnv hook zsh)"
