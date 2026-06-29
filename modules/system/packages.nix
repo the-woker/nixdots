@@ -13,7 +13,6 @@ in
     git
     luarocks
     zsh
-    rofi
     playerctl
     pamixer
     zoxide
@@ -40,10 +39,8 @@ in
     nil
     fzf
     direnv
-    alacritty
     fastfetch
     alsa-utils
-    codeberg-cli
     gnat15
     nix-prefetch-github
     freefont_ttf
@@ -51,34 +48,23 @@ in
     zip
     python3
     file
-    qbittorrent
     icu
     age
     sops
-    spice
-    spice-gtk
-    spice-protocol
-    virtio-win
-    win-spice
-    kdePackages.dolphin
     qt6.qtmultimedia
     qt6.qt5compat
     qt6.qtsvg
     qt6.qtimageformats
     qt6.qtwayland
     yazi
-    waybar
     discord
     vlc
     protonup-qt
-    pyprland
     unrar
     pdf4qt
     qt5.qtgraphicaleffects
     quickshell
     jq
-    # wine
-    wine64Packages.wayland
     limine-full
     ghostty
     wl-clipboard
@@ -92,7 +78,6 @@ in
     inputs.newp.packages.x86_64-linux.default
     usbutils
     psmisc
-    mpv
     yt-dlp
     spotify
   ];

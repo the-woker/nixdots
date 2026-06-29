@@ -30,7 +30,6 @@ in
 {
   _module.args.disks = [ "/dev/nvme0n1" ];
   nixpkgs.overlays = [
-    inputs.nur.overlays.default
   ];
   imports = files;
 
