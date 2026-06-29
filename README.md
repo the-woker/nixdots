@@ -1,2 +1,2 @@
-NixOS with sops-nix, age, mangowm, nvf, and more.
+NixOS with sops-nix, age, mangowc, nvf, and more.
 ![](./screenshot.png)
