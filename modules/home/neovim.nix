@@ -1,8 +1,19 @@
+{ pkgs, ... }:
 {
   programs.nvf = {
     enable = true;
     settings = {
       vim = {
+        lazy.plugins = {
+          "oil.nvim" = {
+            package = pkgs.vimPlugins.oil-nvim;
+            setupModule = "oil";
+            setupOpts = {
+              default_file_explorer = true;
+              option_name = false;
+            };
+          };
+        };
         theme = {
           enable = true;
           name = "catppuccin";
@@ -67,6 +78,13 @@
             mode = "n";
             silent = true;
             action = ":w<CR>";
+          }
+
+          {
+            key = "<leader>e";
+            mode = "n";
+            silent = true;
+            action = ":Oil<CR>";
           }
 
           {
