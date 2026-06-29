@@ -29,13 +29,13 @@ $character\
 palette = "Ashen"
 
 [palettes.Ashen]
-color_bg1 = "#CC6EAD"
-color_bg2 = "#CC6EAD"
-color_bg3 = "#4F2441"
-color_bg4 = "#7A0F5E"
-color_bg5 = "#7A0F5E"
+color_bg1 = "#030303"
+color_bg2 = "#030303"
+color_bg3 = "#C0B7B0"
+color_bg4 = "#FF840A"
+color_bg5 = "#FF840A"
 
-color_red = "#7A0F5E"
+color_red = "#FF840A"
 
 [character]
 error_symbol = "[❯](bold color_red)"
@@ -43,7 +43,7 @@ success_symbol = "[❯](bold #C53030)"
 
 
 [directory]
-style = "bg:color_bg2 fg:#323232"
+style = "bg:color_bg2 fg:#C0B7B0"
 format = "[$path]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
