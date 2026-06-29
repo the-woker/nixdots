@@ -11,7 +11,7 @@ ShellRoot {
     AppLauncher {}
     property color colBg: "#151515"
     property color colMuted: "#444b6a"
-    property color colRed: "#FD1B83"
+    property color colRed: "#FF840A"
     property int memUsage: 0
 
     property string activeWindow: "Window"
