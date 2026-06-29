@@ -6,6 +6,7 @@
 }:
 {
   users.defaultUserShell = pkgs.zsh;
+  users.mutableUsers = false;
   services.getty.autologinUser = name;
   users.users.${name} = {
     isNormalUser = true;

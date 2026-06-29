@@ -20,6 +20,24 @@
         "type": "github"
       }
     },
+    "fibpass": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1782770666,
+        "narHash": "sha256-3qwqzppE1aJwKymPTpfQ1uuUHpjgL4arCamp7VEzIgk=",
+        "owner": "the-woker",
+        "repo": "fibpass",
+        "rev": "095c7744e35359e77364595d1a64f1a1680c9fff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-woker",
+        "repo": "fibpass",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -135,7 +153,7 @@
     },
     "newp": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1781324697,
@@ -199,6 +217,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1764521362,
+        "narHash": "sha256-M101xMtWdF1eSD0xhiR8nG8CXRlHmv6V+VoY65Smwf4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "871b9fd269ff6246794583ce4ee1031e1da71895",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1782467914,
         "narHash": "sha256-pGvFkM8N0xEkIIXDe5YYfbEAvHrk4IxBrjB/x8OomhE=",
         "owner": "NixOS",
@@ -240,11 +274,12 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "fibpass": "fibpass",
         "home-manager": "home-manager",
         "mangowm": "mangowm",
         "newp": "newp",
         "nix-flatpak": "nix-flatpak",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nvf": "nvf",
         "sops-nix": "sops-nix",
         "zen-browser": "zen-browser"

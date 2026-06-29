@@ -35,6 +35,10 @@
       url = "git+https://codeberg.org/woker/nix-cpp-template";
     };
 
+    fibpass = {
+      url = "github:the-woker/fibpass";
+    };
+
   };
 
   outputs =
