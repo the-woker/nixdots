@@ -25,11 +25,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1782770666,
-        "narHash": "sha256-3qwqzppE1aJwKymPTpfQ1uuUHpjgL4arCamp7VEzIgk=",
+        "lastModified": 1782771878,
+        "narHash": "sha256-wLva/sHCXu93AenF5kwblCoOho+EjdIMe8//0UfHI7U=",
         "owner": "the-woker",
         "repo": "fibpass",
-        "rev": "095c7744e35359e77364595d1a64f1a1680c9fff",
+        "rev": "1147a49bddc22caeeef581940123aa219400680e",
         "type": "github"
       },
       "original": {
