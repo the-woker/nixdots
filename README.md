@@ -1,7 +1,7 @@
 NixOS with sops-nix, age, mangowc, nvf, and more.
 ![](./screenshot.png)
 
-DO NOT USE install.py IT'S SPECIFIC TO MY USB DRIVE AND SETUP
+Do not use install.py if you are new to nixos, it's specific to my usb drive and setup
 
 Install instructions:
 
