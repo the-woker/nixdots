@@ -65,63 +65,6 @@
             ./modules
           ];
         };
-        live = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
-            inputs.sops-nix.nixosModules.sops
-            ./modules/system/core.nix
-            ./modules/system/users.nix
-            ./modules/system/wireless.nix
-            ./modules/system/packages.nix
-            ./modules/system/secrets.nix
-            ./modules/system/ssh.nix
-            ./modules/system/vm.nix
-            {
-              networking.hostName = lib.mkForce "live";
-              boot.zfs.forceImportRoot = false;
-              services.getty.autologinUser = lib.mkForce "nick";
-              programs.zsh.enable = true;
-              users.users.nick.hashedPasswordFile = lib.mkForce null;
-              users.users.nick.initialPassword = lib.mkForce "nixos";
-            }
-          ];
-        };
-        live-vm = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-
-          modules = [
-            inputs.sops-nix.nixosModules.sops
-            inputs.home-manager.nixosModules.home-manager
-            ./modules/system/core.nix
-            ./modules/system/users.nix
-            ./modules/system/ssh.nix
-            ./modules/system/packages.nix
-            ./modules/system/secrets.nix
-            ./modules/home
-            {
-              programs.zsh.enable = true;
-              networking.hostName = "live";
-              services.openssh.enable = true;
-
-              users.users.nick.initialPassword = "nixos";
-            }
-
-            {
-              virtualisation.vmVariant = {
-                virtualisation.forwardPorts = [
-                  {
-                    from = "host";
-                    host.port = 2222;
-                    guest.port = 22;
-                  }
-                ];
-              };
-            }
-          ];
-        };
       };
     };
 }

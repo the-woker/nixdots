@@ -21,8 +21,4 @@
     ./home
   ];
 
-  # Optional shared args for all modules
-
-  nixpkgs.overlays = [
-  ];
 }

@@ -23,7 +23,7 @@ in
 {
   home.enableNixpkgsReleaseCheck = false;
   imports = [
-    ../user/theme.nix
+    ./theme.nix
     ./zsh.nix
     ./zen.nix
   ];
