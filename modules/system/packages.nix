@@ -77,6 +77,7 @@ in
     tmux
     inputs.newp.packages.x86_64-linux.default
     inputs.fibpass.packages.x86_64-linux.default
+    inputs.neko.packages.x86_64-linux.default
     usbutils
     psmisc
     yt-dlp

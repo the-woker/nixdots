@@ -38,6 +38,9 @@
     fibpass = {
       url = "github:the-woker/fibpass";
     };
+    neko = {
+      url = "github:the-woker/neko-mangowm";
+    };
 
   };
 
