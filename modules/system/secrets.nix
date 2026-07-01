@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  name,
+  settings,
   ...
 }:
 {
@@ -13,14 +13,14 @@
   };
 
   sops.secrets.ssh-private = {
-    owner = config.users.users.${name}.name;
+    owner = config.users.users.${settings.name}.name;
   };
 
   sops.secrets.passwd = {
     neededForUsers = true;
   };
 
-  users.users.${name} = {
+  users.users.${settings.name} = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     hashedPasswordFile = config.sops.secrets.passwd.path;

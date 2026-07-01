@@ -1,6 +1,6 @@
 {
   config,
-  name,
+  settings,
   pkgs,
   ...
 }:
@@ -27,8 +27,8 @@ in
     ./zsh.nix
     ./zen.nix
   ];
-  home.username = name;
-  home.homeDirectory = "/home/${name}";
+  home.username = settings.name;
+  home.homeDirectory = "/home/${settings.name}";
   home.stateVersion = "26.05";
 
   programs.mangohud.enable = true;
@@ -54,6 +54,6 @@ in
 
   programs.git.enable = true;
   programs.git.settings.user.name = "woker";
-  programs.git.settings.user.email = "wokerNM@proton.me";
+  programs.git.settings.user.email = "settings.email";
 
 }

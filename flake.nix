@@ -53,6 +53,7 @@
       ...
     }@inputs:
     let
+      settings = import ./modules/settings.nix;
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
@@ -63,7 +64,7 @@
       nixosConfigurations = {
         nixos = lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs settings; };
           modules = [
             ./modules
           ];

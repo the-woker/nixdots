@@ -104,11 +104,13 @@ and delete lines 12 through 19
 <details>
 <summary><b>3. Install</b></summary>
 Before you do this, it is recommended  to back up everything to a usb, otherwise you will have to do everything again, except running 
+
 ```
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount ./modules/system/disko-config.nix
 ```
 To back everything up, mount a usb (pick which one via running ```lsblk``` then running ```mount /dev/sdxx```) and move everything to that usb, including ~/.config/sops/age/keys.txt and ~/nixdots.
 
+Modify modules/settings.nix and replace my info with yours.
 
 Once you have done that or if you skipped it, run 
 ```

@@ -2,13 +2,13 @@
   inputs,
   lib,
   pkgs,
+  settings,
   ...
 }:
 {
 
   _module.args = {
-    name = "ratjerky";
-    inherit inputs lib;
+    inherit inputs lib settings;
     disks = [ "/dev/nvme0n1" ];
   };
   imports = [

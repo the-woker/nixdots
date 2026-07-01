@@ -1,14 +1,14 @@
 {
   config,
   pkgs,
-  name,
+  settings,
   ...
 }:
 {
   users.defaultUserShell = pkgs.zsh;
   users.mutableUsers = false;
-  services.getty.autologinUser = name;
-  users.users.${name} = {
+  services.getty.autologinUser = settings.name;
+  users.users.${settings.name} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"

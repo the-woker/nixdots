@@ -1,4 +1,3 @@
-{ name, ... }:
 {
   programs.zsh = {
     enable = true;
@@ -27,7 +26,6 @@
       kbdbrightnessup = "sudo brightnessctl -d smc::kbd_backlight set +5%";
       td = "tmux detach";
       ta = "tmux attach";
-      vm = "sudo nixos-rebuild build-vm --flake /home/${name}/nixdots#live-vm";
     };
 
     sessionVariables = {

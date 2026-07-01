@@ -1,4 +1,4 @@
-{ config, name, ... }:
+{ config, settings, ... }:
 {
   services.openssh = {
     enable = true;
@@ -6,9 +6,8 @@
     settings = {
       PasswordAuthentication = false;
       AllowUsers = [
-        "${name}@*"
+        "${settings.name}@*"
         "megan@*"
-        "nick@*"
       ];
       X11Forwarding = false;
     };
