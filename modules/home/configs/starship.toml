@@ -32,10 +32,10 @@ palette = "Ashen"
 color_bg1 = "#030303"
 color_bg2 = "#030303"
 color_bg3 = "#C0B7B0"
-color_bg4 = "#FF840A"
-color_bg5 = "#FF840A"
+color_bg4 = "#FEFF01"
+color_bg5 = "#FEFF01"
 
-color_red = "#FF840A"
+color_red = "#FEFF01"
 
 [character]
 error_symbol = "[❯](bold color_red)"
