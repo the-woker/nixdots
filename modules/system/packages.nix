@@ -82,5 +82,7 @@ in
     psmisc
     yt-dlp
     spotify
+    swww
+    awww
   ];
 }
