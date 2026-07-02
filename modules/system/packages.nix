@@ -84,5 +84,6 @@ in
     spotify
     swww
     awww
+    nvtopPackages.nvidia
   ];
 }

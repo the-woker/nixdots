@@ -2,14 +2,11 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import "bar"
-import "launcher"
+import "app-launcher"
 import "wallpaper"
 
 Scope {
-    id: rootShell
-
-    readonly property var globalTheme: Theme {}
-
+    readonly property var theme: Theme {}
     AppLauncher {
         id: launcher
     }
