@@ -30,7 +30,7 @@ Singleton {
     // Memory Usage
     Process {
         id: memProc
-        command: ["sh", "-c", "free | grep Mem | awk '{printf \"%.1f%%\", ($3/$2) * 100.0}'"]
+        command: ["sh", "-c", "free -m | grep Mem | awk '{printf \"%.2f GB / %.2f GB\", $3/1024, $2/1024}'"]
         running: true
 
         stdout: StdioCollector {
