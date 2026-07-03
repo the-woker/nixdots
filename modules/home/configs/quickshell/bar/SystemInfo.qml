@@ -80,7 +80,6 @@ Singleton {
             cpuProc.running = true;
             memProc.running = true;
             netProc.running = true;
-            batteryProc.running = true;
             tempProc.running = true;
         }
     }
