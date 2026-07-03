@@ -85,5 +85,6 @@ in
     swww
     awww
     nvtopPackages.nvidia
+    lm_sensors
   ];
 }
