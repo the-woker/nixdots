@@ -86,5 +86,6 @@ in
     awww
     nvtopPackages.nvidia
     lm_sensors
+    dmidecode
   ];
 }

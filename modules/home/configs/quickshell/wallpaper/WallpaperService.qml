@@ -14,7 +14,7 @@ Singleton {
     // Scan wallpaper directories
     Process {
         id: scanner
-        command: ["sh", "-c", "find ~/nixdots/modules/home/configs/mango/wallp/ -maxdepth 2 -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) 2>/dev/null | sort -u | head -200"]
+        command: ["sh", "-c", "find ~/nixdots/modules/home/configs/quickshell/wallpaper/images/ -maxdepth 2 -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) 2>/dev/null | sort -u | head -200"]
         running: false
         stdout: SplitParser {
             onRead: data => {
@@ -25,8 +25,6 @@ Singleton {
             }
         }
     }
-
-    // Load saved wallpaper path
     FileView {
         id: configFile
         path: Quickshell.env("HOME") + "/.config/quickshell/wallpaper.conf"

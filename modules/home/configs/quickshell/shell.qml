@@ -8,7 +8,17 @@ import "wallpaper"
 Scope {
     id: rootShell
 
-    readonly property var globalTheme: Theme {}
+    FileView {
+        id: wallpaperFile
+        path: "/home/ratjerky/nixdots/modules/home/configs/quickshell/wallpaper.conf"
+        watchChanges: true
+
+        onFileChanged: reload()
+    }
+
+    readonly property var globalTheme: Theme {
+        currentWallpaper: wallpaperFile.text()
+    }
 
     AppLauncher {
         id: launcher

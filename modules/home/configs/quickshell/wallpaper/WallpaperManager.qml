@@ -58,7 +58,6 @@ Scope {
             right: true
         }
 
-        // Dark overlay backdrop
         MouseArea {
             anchors.fill: parent
             onClicked: wallpaperPanel.visible = false
@@ -69,7 +68,6 @@ Scope {
             }
         }
 
-        // Main wallpaper picker box
         Rectangle {
             anchors.centerIn: parent
             width: 720
@@ -89,7 +87,6 @@ Scope {
                 anchors.margins: 16
                 spacing: 12
 
-                // Header
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 12
@@ -113,7 +110,6 @@ Scope {
                         font.family: root.font
                     }
 
-                    // Refresh button
                     Rectangle {
                         width: 28
                         height: 28
@@ -140,7 +136,6 @@ Scope {
                     }
                 }
 
-                // Search
                 Rectangle {
                     Layout.fillWidth: true
                     height: 36
@@ -195,7 +190,6 @@ Scope {
                     }
                 }
 
-                // Wallpaper grid
                 GridView {
                     id: wallpaperGrid
                     Layout.fillWidth: true
@@ -249,7 +243,6 @@ Scope {
                                 }
                             }
 
-                            // Filename label
                             Rectangle {
                                 anchors.bottom: parent.bottom
                                 anchors.left: parent.left
@@ -269,7 +262,6 @@ Scope {
                                 }
                             }
 
-                            // Active indicator
                             Rectangle {
                                 anchors.top: parent.top
                                 anchors.right: parent.right
@@ -306,10 +298,9 @@ Scope {
                         }
                     }
 
-                    // Empty state
                     Text {
                         anchors.centerIn: parent
-                        text: "󰋩  No wallpapers found\nAdd images to ~/Pictures/Wallpapers/"
+                        text: "󰋩  No wallpapers found\nAdd images to ~/nixdots/modules/home/configs/quickshell/wallpaper/images/"
                         color: root.theme.textMuted
                         font.pixelSize: 13
                         font.family: root.font
@@ -318,7 +309,6 @@ Scope {
                     }
                 }
 
-                // Footer
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 16
@@ -391,7 +381,6 @@ Scope {
             }
         }
 
-        // Preview overlay
         Rectangle {
             anchors.fill: parent
             color: Qt.rgba(0, 0, 0, 0.85)
@@ -411,7 +400,6 @@ Scope {
                 asynchronous: true
             }
 
-            // Apply button
             Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter

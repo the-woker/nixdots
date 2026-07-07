@@ -52,6 +52,14 @@ in
     };
   };
 
+  xdg.desktopEntries = {
+    wl-color-picker = {
+      exec = "wl-color-picker";
+      genericName = "Color Picker";
+      name = "Color Picker";
+      terminal = false;
+    };
+  };
   programs.git.enable = true;
   programs.git.settings.user.name = "woker";
   programs.git.settings.user.email = "settings.email";

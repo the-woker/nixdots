@@ -1,6 +1,8 @@
 import QtQuick
 
 QtObject {
+    property string currentWallpaper: ""
+
     readonly property color bgBase: "#111111"
     readonly property color bgSurface: "#24283b"
     readonly property color bgOverlay: "#88000000"
@@ -11,9 +13,21 @@ QtObject {
     readonly property color textSecondary: "#a9b1d6"
     readonly property color textMuted: "#565f89"
 
-    readonly property color accentPrimary: "#F3ABB9"
-    // readonly property color accentPrimary: "#FFFF01"
-    // readonly property color accentPrimary: "#FF8704"
+    readonly property color accentPrimary: {
+        var cleanPath = currentWallpaper.trim();
+
+        if (cleanPath.endsWith("ichigo.png")) {
+            return "#FF8704";
+        } else if (cleanPath.endsWith("bleach.jpeg")) {
+            return "#FF8704";
+        } else if (cleanPath.endsWith("moon.png")) {
+            return "#FFFF01";
+        } else if (cleanPath.endsWith("kessoku.png")) {
+            return "#F3ABB9";
+        } else if (cleanPath.endsWith("katanazero.png")) {
+            return "#58377F";
+        }
+    }
 
     readonly property color urgencyLow: textMuted
     readonly property color urgencyNormal: accentPrimary
