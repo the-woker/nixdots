@@ -82,7 +82,6 @@ in
     psmisc
     yt-dlp
     spotify
-    swww
     awww
     nvtopPackages.nvidia
     lm_sensors
