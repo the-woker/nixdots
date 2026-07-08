@@ -6,6 +6,9 @@
 let
 in
 {
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
   environment.systemPackages = with pkgs; [
     vim
     wget
@@ -86,5 +89,6 @@ in
     nvtopPackages.nvidia
     lm_sensors
     dmidecode
+    bitwarden-desktop
   ];
 }
