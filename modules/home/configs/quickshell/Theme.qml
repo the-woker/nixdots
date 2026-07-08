@@ -20,6 +20,8 @@ QtObject {
             return "#FF8704";
         } else if (cleanPath.endsWith("bleach.jpeg")) {
             return "#FF8704";
+        } else if (cleanPath.endsWith("bleach2.jpg")) {
+            return "#FF8704";
         } else if (cleanPath.endsWith("rukia.jpg")) {
             return "#80A2CF";
         } else if (cleanPath.endsWith("rukia2.png")) {
