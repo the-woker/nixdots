@@ -28,7 +28,6 @@ let
   };
 
   extensions = [
-    (extension "ublock-origin" "uBlock0@raymondhill.net")
     (extension "vimium-ff" "{d7742d87-e61d-4b78-b8a1-b469842139fa}")
     (extension "adnauseam" "adnauseam@rednoise.org")
     (extension "trackmenot-fork" "trackmenot-fork@paradonym")
