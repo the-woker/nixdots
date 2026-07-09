@@ -27,7 +27,6 @@ in
     libclang
     lua
     stylua
-    neovim-node-client
     unzip
     glslang
     vulkan-headers
