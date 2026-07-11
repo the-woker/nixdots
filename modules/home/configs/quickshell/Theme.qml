@@ -32,6 +32,14 @@ QtObject {
             return "#F3ABB9";
         } else if (cleanPath.endsWith("katanazero.png")) {
             return "#58377F";
+        } else if (cleanPath.endsWith("ed2.jpg")) {
+            return "#E6C345";
+        } else if (cleanPath.endsWith("ed.jpg")) {
+            return "#BF252D";
+        } else if (cleanPath.endsWith("ed3.png")) {
+            return "#9A3537";
+        } else if (cleanPath.endsWith("philedelphia.jpg")) {
+            return "#BF252D";
         }
     }
 
