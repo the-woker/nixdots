@@ -89,5 +89,6 @@ in
     lm_sensors
     dmidecode
     bitwarden-desktop
+    wine
   ];
 }

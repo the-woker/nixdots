@@ -16,8 +16,11 @@
       appId = "com.github.Matoking.protontricks";
       origin = "flathub";
     }
+    {
+      appId = "com.usebottles.bottles";
+      origin = "flathub";
+    }
 
   ];
 
 }
-
