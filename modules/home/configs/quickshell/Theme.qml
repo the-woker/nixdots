@@ -40,6 +40,8 @@ QtObject {
             return "#9A3537";
         } else if (cleanPath.endsWith("philedelphia.jpg")) {
             return "#BF252D";
+        } else if (cleanPath.endsWith("silverdick.jpg")) {
+            return "#446D99";
         }
     }
 
