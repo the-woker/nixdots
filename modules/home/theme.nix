@@ -1,42 +1,35 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, config, ... }:
+
 {
   home.packages = with pkgs; [
     adwaita-icon-theme
     gnome-themes-extra
   ];
 
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    name = "BreezeX-RosePine-Linux";
+    package = pkgs.rose-pine-cursor;
+    size = 24;
+  };
+
   gtk = {
     enable = true;
-    theme.name = "Adwaita";
-    iconTheme.name = "Adwaita";
-    cursorTheme = {
+    theme = {
+      name = "Adwaita";
+      package = pkgs.gnome-themes-extra;
+    };
+    iconTheme = {
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
-      size = 24;
     };
   };
 
-  xdg.configFile."gtk-3.0/settings.ini".text = ''
-    [Settings]
-    gtk-theme-name=Adwaita
-    gtk-icon-theme-name=Adwaita
-    gtk-cursor-theme-name=Adwaita
-    gtk-cursor-theme-size=24
-  '';
-
-  xdg.configFile."gtk-4.0/settings.ini".text = ''
-    [Settings]
-    gtk-theme-name=Adwaita
-    gtk-icon-theme-name=Adwaita
-    gtk-cursor-theme-name=Adwaita
-    gtk-cursor-theme-size=24
-  '';
-
   home.sessionVariables = {
-    XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "24";
+    XCURSOR_THEME = config.home.pointerCursor.name;
+    XCURSOR_SIZE = toString config.home.pointerCursor.size;
+
+    GDK_BACKEND = "wayland,x11";
   };
 }
