@@ -88,7 +88,6 @@ in
     nvtopPackages.nvidia
     lm_sensors
     dmidecode
-    bitwarden-desktop
     wine
   ];
 }

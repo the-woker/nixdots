@@ -23,14 +23,17 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     mangowm = {
       url = "github:mangowm/mango";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     newp = {
       url = "git+https://codeberg.org/woker/nix-cpp-template";
     };
@@ -38,10 +41,10 @@
     fibpass = {
       url = "github:the-woker/fibpass";
     };
+
     neko = {
       url = "github:the-woker/neko-mangowm";
     };
-
   };
 
   outputs =
