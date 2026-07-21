@@ -18,18 +18,10 @@
               };
             };
             root = {
-              end = "-8G";
               content = {
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
-              };
-            };
-            swap = {
-              size = "100%";
-              content = {
-                type = "swap";
-                randomEncryption = true;
               };
             };
           };
