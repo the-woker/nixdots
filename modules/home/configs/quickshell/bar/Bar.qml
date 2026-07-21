@@ -358,6 +358,35 @@ Scope {
                         }
 
                         spacing: 4
+                        Rectangle {
+                            height: 24
+                            width: gpuContent.width + 12
+                            radius: 12
+                            color: root.theme.bgSurface
+                            Accessible.role: Accessible.StaticText
+                            Accessible.name: "GPU: " + root.gpuUsage
+
+                            Row {
+                                id: gpuContent
+                                anchors.centerIn: parent
+                                spacing: 6
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "󰢮"
+                                    color: root.theme.accentPrimary
+                                    font.pixelSize: 14
+                                    font.family: root.font
+                                }
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: SystemInfo.gpuUsage
+                                    color: root.theme.textPrimary
+                                    font.pixelSize: 11
+                                    font.family: root.font
+                                }
+                            }
+                        }
 
                         // CPU
                         Rectangle {
@@ -376,7 +405,7 @@ Scope {
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: "󰻠"
-                                    color: root.theme.accentOrange
+                                    color: root.theme.accentPrimary
                                     font.pixelSize: 14
                                     font.family: root.font
                                 }

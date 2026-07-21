@@ -8,6 +8,7 @@ Singleton {
     id: root
 
     property string cpuUsage: "0%"
+    property string gpuUsage: "0%"
     property string memoryUsage: "0%"
     property string networkInfo: "Disconnected"
     property string networkType: "disconnected"
@@ -23,6 +24,18 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 root.cpuUsage = text.trim();
+            }
+        }
+    }
+
+    Process {
+        id: gpuProc
+        command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | awk '{print $1\"%\"}'"]
+        running: true
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.gpuUsage = text.trim();
             }
         }
     }
@@ -78,6 +91,7 @@ Singleton {
         repeat: true
         onTriggered: {
             cpuProc.running = true;
+            gpuProc.running = true;
             memProc.running = true;
             netProc.running = true;
             tempProc.running = true;
