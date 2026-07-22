@@ -30,6 +30,10 @@ QtObject {
             return "#FF8704";
         } else if (cleanPath.endsWith("moon.png")) {
             return "#FFFF01";
+        } else if (cleanPath.endsWith("ranni.jpeg")) {
+            return "#80A2CF";
+        } else if (cleanPath.endsWith("ranni2.png")) {
+            return "#80A2CF";
         } else if (cleanPath.endsWith("kessoku.png")) {
             return "#F3ABB9";
         } else if (cleanPath.endsWith("katanazero.png")) {
