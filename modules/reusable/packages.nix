@@ -89,5 +89,6 @@ in
     lm_sensors
     dmidecode
     wine
+    nix-search-tv
   ];
 }

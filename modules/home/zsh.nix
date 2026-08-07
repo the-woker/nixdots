@@ -7,6 +7,8 @@
     syntaxHighlighting.enable = true;
 
     shellAliases = {
+
+      ns = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}'";
       pkg = "nvim ~/nixdots/modules/reusable/packages.nix && nrs";
       npa = "nix profile add .";
       die = "shutdown -h now";
