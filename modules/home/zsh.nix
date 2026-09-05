@@ -32,6 +32,7 @@
 
     sessionVariables = {
       LS_COLORS = "di=0;35:fi=0;37:ln=0;36:so=0;32:pi=0;33:ex=0;31:";
+      SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
       SDL_VIDEODRIVER = "x11";
       CC = "gcc";
       CXX = "g++";
