@@ -50,6 +50,8 @@ QtObject {
             return "#BF252D";
         } else if (cleanPath.endsWith("silverdick.jpg")) {
             return "#446D99";
+        } else if (cleanPath.endsWith("goku.jpg")) {
+            return "#FFA93A";
         }
     }
 
