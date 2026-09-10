@@ -1,6 +1,20 @@
 { pkgs, ... }:
 {
   boot = {
+    plymouth = {
+      enable = true;
+      themePackages = [ inputs.evangelion-ui.packages.${pkgs.system}.evangelion-ui ];
+      theme = "evangelion-ui";
+    };
+
+    # Enable "Silent boot"
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "rd.udev.log_level=3"
+      "rd.systemd.show_status=auto"
+    ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "nvidia-drm.modeset=1"

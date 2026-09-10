@@ -45,6 +45,10 @@
     neko = {
       url = "github:the-woker/neko-mangowm";
     };
+    evangelion-ui = {
+      url = "gitlab:lobstermane/evangelion-ui-plymouth";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
