@@ -18,6 +18,7 @@ let
     fastfetch = "fastfetch";
     mango = "mango";
     tmux = "tmux";
+    nvim = "nvim";
   };
 in
 {
@@ -64,6 +65,6 @@ in
   programs.git.settings.user.name = "woker";
   programs.git.settings.user.email = "settings.email";
 
-services.mpris-proxy.enable = true;
+  services.mpris-proxy.enable = true;
 
 }

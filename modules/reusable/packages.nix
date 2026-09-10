@@ -90,5 +90,6 @@ in
     dmidecode
     wine
     nix-search-tv
+    bluez-experimental
   ];
 }
