@@ -64,4 +64,6 @@ in
   programs.git.settings.user.name = "woker";
   programs.git.settings.user.email = "settings.email";
 
+services.mpris-proxy.enable = true;
+
 }
