@@ -1,25 +1,57 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   boot = {
     plymouth = {
       enable = true;
-      themePackages = [ inputs.evangelion-ui.packages.${pkgs.system}.evangelion-ui ];
       theme = "evangelion-ui";
-    };
+      extraConfig = ''
+        [Daemon]
+        ShowDelay=0
+      '';
+      themePackages = [
+        (inputs.evangelion-ui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+          installPhase = ''
+            mkdir -p $out/share/plymouth/themes/evangelion-ui
+            cp evangelion-ui.plymouth evangelion-ui.script $out/share/plymouth/themes/evangelion-ui/
+            tar -xzf images.tar.gz -C $out/share/plymouth/themes/evangelion-ui/
 
-    # Enable "Silent boot"
+            substituteInPlace $out/share/plymouth/themes/evangelion-ui/evangelion-ui.plymouth \
+              --replace "EVANGELION_UI_PATH" "$out"
+          '';
+        }))
+      ];
+    };
+    initrd.systemd.enable = true;
+
     consoleLogLevel = 3;
     initrd.verbose = false;
+    initrd.kernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
+
+    initrd.availableKernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
+
     kernelParams = [
       "quiet"
+      "splash"
       "rd.udev.log_level=3"
       "rd.systemd.show_status=auto"
-    ];
-    kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [
       "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
+      "plymouth.use-simpledrm"
+      "plymouth.ignore-serial-consoles"
     ];
+
+    kernelPackages = pkgs.linuxPackages_latest;
+
     loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -40,5 +72,14 @@
       };
       grub.enable = false;
     };
+  };
+  systemd.services.plymouth-quit = {
+    description = "Hold Plymouth splash screen for fast boot";
+    serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # Change 2 to however many seconds you want to see the animation
+  };
+
+  systemd.services."getty@tty1" = {
+    after = [ "plymouth-quit.service" ];
+    wants = [ "plymouth-quit.service" ];
   };
 }

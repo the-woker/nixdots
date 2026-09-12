@@ -91,5 +91,7 @@ in
     wine
     nix-search-tv
     bluez-experimental
+    neovim
+    nixfmt
   ];
 }
