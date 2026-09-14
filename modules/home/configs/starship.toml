@@ -1,163 +1,193 @@
-"$schema" = "https://starship.rs/config-schema.json"
+# ---------------------------------------
+# cybr-starship    lucid theme for starship
+# Project:         https://github.com/cybrcore/cybr-starship
+# Author:          scherrer-txt   |   License:     GPL-3.0
+# Source:          ~/.config/starship/cybrcore.toml
+# ---------------------------------------
 
-add_newline = false
-
-command_timeout = 1500
+scan_timeout = 100
 
 format = """
-[](fg:color_bg1)\
-$os\
 $username\
-$hostname\
-[ ](fg:color_bg1 bg:color_bg2)\
+[](fg:no1 bg:re2)\
+$shell\
+[](fg:re2 bg:re0)\
 $directory\
-[ ](fg:color_bg2 bg:color_bg3)\
+[](fg:re0)\
 $git_branch\
 $git_status\
-[ ](fg:color_bg3 bg:color_bg4)\
 $c\
-$cpp\
-$dotnet\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
 $java\
-$kotlin\
-$nodejs\
-[ ](fg:color_bg4 bg:color_bg5)\
-[ ](fg:color_bg5)\
-$character\
+$julia\
+$nim\
+$rust\
+$scala\
+$docker_context\
+$time\
+$line_break$character
 """
 
-palette = "Ashen"
+palette = "cybr_ship"
 
-[palettes.Ashen]
-color_bg1 = "#030303"
-color_bg2 = "#030303"
-color_bg3 = "#333333"
-color_bg4 = "#C0B7B0"
-color_bg5 = "#C0B7B0"
+[username]
+show_always = true
+style_user = "bg:no1 fg:re0"
+format = '[ $user ]($style)'
+disabled = false
 
-color_red = "#C0B7B0"
-
-[character]
-error_symbol = "[❯](bold color_red)"
-success_symbol = "[❯](bold #C53030)"
-
+[shell]
+style = "bg:re2 fg:re0"
+format = '[ $indicator ]($style)'
+disabled = false
 
 [directory]
-style = "bg:color_bg2 fg:#C0B7B0"
-format = "[$path]($style)"
+style = "fg:re2 bg:re0"
+format = "[ $path ](bold $style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
+[line_break]
+disabled = false
+
+[jobs]
+disabled = true
+
+[character]
+success_symbol = "[❯ ](fg:re0)"
+error_symbol = "[](fg:re0)"
+vicmd_symbol = "[󰆤](fg:ye0)"
+format = "$symbol"
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "fg:cy0 bg:cy2"
+format = '[](fg:cy2)[ $time ]($style)[](fg:cy2)'
+
+[custom.time_arrow]
+disabled = false
+command = 'echo -n ""'
+when = 'true'
+style = "fg:cy2"
+format = '[ $output]($style)'
+
+[custom.transient_time]
+disabled = false
+command = 'date "+%H:%M"'
+when = 'true'
+style = "fg:cy0 bg:cy2"
+format = '[ $output ]($style)'
+
+[palettes.cybr_ship]
+no0 = "#030408"
+no1 = "#05070D"
+
+re0 = "#F24848"
+re2 = "#331215"
+
+gr0 = "#30F291"
+gr2 = "#0C3423"
+
+ye0 = "#F2D230"
+ye2 = "#332D10"
+
+bl0 = "#3061F2"
+bl2 = "#0C1737"
+
+pu0 = "#A130F2"
+pu2 = "#230D37"
+
+cy0 = "#29BECC"
+cy2 = "#0B292F"
+
+wh0 = "#898D99"
+wh2 = "#1E2025"
+
+me0 = "#4D5A80"
+me2 = "#0D1120"
+
+or0 = "#F23D18"
+or2 = "#330F0B"
 
 [git_branch]
 symbol = ""
-style = "bg:color_bg3 fg:#121212"
-format = "[$symbol $branch]($style)"
+style = "bg:pu2 fg:pu0"
+format = "[](fg:pu2)[ $symbol $branch ]($style)[](fg:pu2)"
 
 [git_status]
-ahead = "⇡${count}"
-behind = "⇣${count}"
-deleted = ""
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-format = '[( $all_status$ahead_behind)]($style)'
-style = "bold bg:color_bg3 fg:color_red"
+style = "bg:pu0 fg:pu2"   # hlavní blok
+format = "[](fg:pu0)[ $all_status$ahead_behind ]($style)[](fg:pu0)"
 
-[hostname]
-format = "[@$hostname]($style)"
-ssh_only = true
-ssh_symbol = " "
-style = "bg:color_bg1 fg:#f2f2f2"
-
-[os]
-format = "[$symbol]($style)"
-style = "bg:color_bg1 fg:#323232"
-disabled = false
-
-[username]
-disabled = false
-format = "[$user]($style)"
-show_always = true
-style_root = "bg:color_bg1 fg:#323232"
-style_user = "bg:color_bg1 fg:#323232"
-
-# Code symbols
 [c]
-format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#6295CB"
-symbol = " "
+symbol = ""
+style = "bg:bl2 fg:bl0"
+format = "[](fg:pu2 bg:bl2)[ $symbol ($version) ]($style)"
 
 [cpp]
-format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#6295CB"
-symbol = " "
-disabled = false
+symbol = ""
+style = "bg:bl2 fg:bl0"
+format = "[ $symbol ($version) ]($style)"
 
-[dotnet]
-format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#1180C3"
-symbol = " "
+[elm]
+symbol = ""
+style = "bg:bl2 fg:bl0"
+format = "[ $symbol ($version) ]($style)"
+
+[golang]
+symbol = ""
+style = "bg:bl2 fg:bl0"
+format = "[ $symbol ($version) ]($style)"
+
+[gradle]
+style = "bg:cy2 fg:cy0"
+format = "[](fg:bl2 bg:cy2)[ $symbol ($version) ]($style)"
+
+[julia]
+symbol = ""
+style = "bg:cy2 fg:cy0"
+format = "[ $symbol ($version) ]($style)"
 
 [java]
-format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#F7901E"
-symbol = " "
+symbol = ""
+style = "bg:or2 fg:or0"
+format = "[](fg:cy2 bg:or2)[ $symbol ($version) ]($style)"
 
-[kotlin]
-format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#C017E4"
-symbol = " "
+[rust]
+symbol = ""
+style = "bg:or2 fg:or0"
+format = "[ $symbol ($version) ]($style)"
 
-[nodejs]
-style = "bg:color_bg4 fg:#5FA04E"
-format = '[$symbol($version)]($style)'
-symbol = " "
+[python]
+symbol = ""
+style = "bg:ye2 fg:ye0"
+format = "[](fg:or2 bg:ye2)[ $symbol ($version) ]($style)"
 
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "
+[nim]
+symbol = "󰆥"
+style = "bg:ye2 fg:ye0"
+format = "[ $symbol ($version) ]($style)"
+
+[haskell]
+symbol = ""
+style = "bg:pu2 fg:pu0"
+format = "[](fg:ye2 bg:pu2)[ $symbol ($version) ]($style)"
+
+[elixir]
+symbol = ""
+style = "bg:pu2 fg:pu0"
+format = "[ $symbol ($version) ]($style)"
+
+[scala]
+symbol = ""
+style = "bg:re2 fg:re0"
+format = "[](fg:pu2 bg:re2)[ $symbol ($version) ]($style)"
+
+[docker_context]
+symbol = ""
+style = "bg:bl2 fg:bl0"
+format = "[](fg:re2 bg:bl2)[ $symbol $context ]($style)"

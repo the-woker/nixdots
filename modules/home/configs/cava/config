@@ -1,0 +1,15 @@
+
+[color]
+
+; background = default
+; foreground = default
+
+; background = '#111111'
+; foreground = '#33cccc'
+
+
+gradient = 1
+
+gradient_color_1 = '#631F21' #re1
+gradient_color_2 = '#F24848' #re0
+gradient_color_3 = '#F26118' #og0
