@@ -11,6 +11,4 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.o.cursorline = true
 
 vim.o.confirm = true
-require("cyberpunk").setup({
-	theme = "dark",
-})
+vim.cmd([[colorscheme tokyonight-night]])

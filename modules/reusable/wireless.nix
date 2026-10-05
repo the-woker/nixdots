@@ -36,4 +36,15 @@
   };
 
   services.blueman.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # Allows resolving .local domains using IPv4
+    openFirewall = true; # Automatically opens UDP 5353 for mDNS
+    publish = {
+      enable = true;
+      addresses = true;
+      userServices = true;
+      workstation = true;
+    };
+  };
 }

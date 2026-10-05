@@ -75,7 +75,7 @@
   };
   systemd.services.plymouth-quit = {
     description = "Hold Plymouth splash screen for fast boot";
-    serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # Change 2 to however many seconds you want to see the animation
+    serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 4";
   };
 
   systemd.services."getty@tty1" = {

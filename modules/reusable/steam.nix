@@ -29,4 +29,11 @@
     LIBVA_DRIVER_NAME = "nvidia";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
+
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true; # Necessary for KMS screen capture on Linux
+    openFirewall = true; # Automatically opens necessary UDP/TCP ports
+  };
 }

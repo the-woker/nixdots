@@ -93,5 +93,10 @@ in
     bluez-experimental
     neovim
     nixfmt
+    bluetui
+    pdfminer
+    lutris
+    uxplay
+    avahi
   ];
 }
