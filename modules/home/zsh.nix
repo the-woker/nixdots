@@ -28,6 +28,7 @@
       kbdbrightnessup = "sudo brightnessctl -d smc::kbd_backlight set +5%";
       td = "tmux detach";
       ta = "tmux attach";
+      py = "python";
     };
 
     sessionVariables = {

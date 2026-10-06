@@ -94,7 +94,6 @@ in
     neovim
     nixfmt
     bluetui
-    pdfminer
     lutris
     uxplay
     avahi
