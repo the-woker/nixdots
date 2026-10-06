@@ -269,7 +269,7 @@ Scope {
                                 width: 20
                                 height: 20
                                 radius: 10
-                                color: root.theme.accentGreen
+                                color: root.theme.accentPrimary
                                 visible: WallpaperService.currentWallpaper === modelData
 
                                 Text {

@@ -13,48 +13,36 @@ QtObject {
     readonly property color textSecondary: "#a9b1d6"
     readonly property color textMuted: "#565f89"
 
-    readonly property color accentPrimary: {
+readonly property color accentPrimary: {
         var cleanPath = currentWallpaper.trim();
+        
+        var colors = {
+            "ichigo.jpg": "#FF8704",
+            "bleach.jpeg": "#FF8704",
+            "bleach2.jpg": "#FF8704",
+            "bleach3.jpg": "#FF8704",
+            "rukia.jpg": "#80A2CF",
+            "rukia2.png": "#FF8704",
+            "moon.png": "#FFFF01",
+            "ranni.jpeg": "#80A2CF",
+            "ranni3.png": "#80A2CF",
+            "kessoku.png": "#F3ABB9",
+            "katanazero.png": "#58377F",
+            "katanazero.jpg": "#58377F",
+            "ed.jpg": "#BF252D",
+            "ed2.jpg": "#E6C345",
+            "ed3.png": "#9A3537",
+            "philedelphia.jpg": "#BF252D",
+            "silverdick.jpg": "#446D99",
+            "goku.jpg": "#FFA93A"
+        };
 
-        if (cleanPath.endsWith("ichigo.jpg")) {
-            return "#FF8704";
-        } else if (cleanPath.endsWith("bleach.jpeg")) {
-            return "#FF8704";
-        } else if (cleanPath.endsWith("bleach2.jpg")) {
-            return "#FF8704";
-        } else if (cleanPath.endsWith("bleach3.jpg")) {
-            return "#FF8704";
-        } else if (cleanPath.endsWith("rukia.jpg")) {
-            return "#80A2CF";
-        } else if (cleanPath.endsWith("rukia2.png")) {
-            return "#FF8704";
-        } else if (cleanPath.endsWith("moon.png")) {
-            return "#FFFF01";
-        } else if (cleanPath.endsWith("ranni.jpeg")) {
-            return "#80A2CF";
-        } else if (cleanPath.endsWith("ranni2.png")) {
-            return "#80A2CF";
-        } else if (cleanPath.endsWith("ranni3.png")) {
-            return "#80A2CF";
-        } else if (cleanPath.endsWith("kessoku.png")) {
-            return "#F3ABB9";
-        } else if (cleanPath.endsWith("katanazero.png")) {
-            return "#58377F";
-        } else if (cleanPath.endsWith("katanazero.jpg")) {
-            return "#FD4CFF";
-        } else if (cleanPath.endsWith("ed.jpg")) {
-            return "#BF252D";
-        } else if (cleanPath.endsWith("ed2.jpg")) {
-            return "#E6C345";
-        } else if (cleanPath.endsWith("ed3.png")) {
-            return "#9A3537";
-        } else if (cleanPath.endsWith("philedelphia.jpg")) {
-            return "#BF252D";
-        } else if (cleanPath.endsWith("silverdick.jpg")) {
-            return "#446D99";
-        } else if (cleanPath.endsWith("goku.jpg")) {
-            return "#FFA93A";
+        for (var key in colors) {
+            if (cleanPath.endsWith(key)) {
+                return colors[key];
+            }
         }
+        return textPrimary; // Fallback
     }
 
     readonly property color urgencyLow: textMuted

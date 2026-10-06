@@ -13,6 +13,7 @@ Singleton {
     property string networkInfo: "Disconnected"
     property string networkType: "disconnected"
     property int batteryLevelRaw: 0
+    property bool batteryCharging: false
     property string temperature: "0°C"
 
     // CPU Usage
@@ -84,6 +85,33 @@ Singleton {
         }
     }
 
+    // Battery Percentage Level
+    Process {
+        id: batLevelProc
+        command: ["cat", "/sys/class/power_supply/BAT0/capacity"]
+        running: true
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const val = parseInt(text.trim());
+                root.batteryLevelRaw = isNaN(val) ? 0 : val;
+            }
+        }
+    }
+
+    // Battery Charging State
+    Process {
+        id: batStateProc
+        command: ["cat", "/sys/class/power_supply/BAT0/status"]
+        running: true
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.batteryCharging = (text.trim() === "Charging");
+            }
+        }
+    }
+
     // Update timer
     Timer {
         interval: 2000
@@ -95,6 +123,8 @@ Singleton {
             memProc.running = true;
             netProc.running = true;
             tempProc.running = true;
+            batLevelProc.running = true;
+            batStateProc.running = true;
         }
     }
 }

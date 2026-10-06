@@ -347,46 +347,8 @@ Scope {
                     Row {
                         id: sysInfo
 
-                        readonly property color batteryColor: {
-                            if (SystemInfo.batteryCharging)
-                                return root.theme.accentGreen;
-                            if (SystemInfo.batteryLevelRaw > 20)
-                                return root.theme.batteryGood;
-                            if (SystemInfo.batteryLevelRaw > 10)
-                                return root.theme.batteryWarning;
-                            return root.theme.batteryCritical;
-                        }
 
                         spacing: 4
-                        Rectangle {
-                            height: 24
-                            width: gpuContent.width + 12
-                            radius: 12
-                            color: root.theme.bgSurface
-                            Accessible.role: Accessible.StaticText
-                            Accessible.name: "GPU: " + root.gpuUsage
-
-                            Row {
-                                id: gpuContent
-                                anchors.centerIn: parent
-                                spacing: 6
-
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: "󰢮"
-                                    color: root.theme.accentPrimary
-                                    font.pixelSize: 14
-                                    font.family: root.font
-                                }
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: SystemInfo.gpuUsage
-                                    color: root.theme.textPrimary
-                                    font.pixelSize: 11
-                                    font.family: root.font
-                                }
-                            }
-                        }
 
                         // CPU
                         Rectangle {
@@ -412,6 +374,37 @@ Scope {
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: SystemInfo.cpuUsage
+                                    color: root.theme.textPrimary
+                                    font.pixelSize: 11
+                                    font.family: root.font
+                                }
+                            }
+                        }
+
+                        // Battery
+                        Rectangle {
+                            height: 24
+                            width: batteryContent.width + 12
+                            radius: 12
+                            color: root.theme.bgSurface
+                            Accessible.role: Accessible.StaticText
+                            Accessible.name: "Battery: " + SystemInfo.batteryLevelRaw + "%"
+
+                            Row {
+                                id: batteryContent
+                                anchors.centerIn: parent
+                                spacing: 6
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: SystemInfo.batteryCharging ? "  " : "  "
+                                    color: root.theme.accentPrimary
+                                    font.pixelSize: 14
+                                    font.family: root.font
+                                }
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: SystemInfo.batteryLevelRaw + "%"
                                     color: root.theme.textPrimary
                                     font.pixelSize: 11
                                     font.family: root.font
@@ -477,7 +470,7 @@ Scope {
                                             return "󰖩";
                                         return "󰖪";
                                     }
-                                    color: SystemInfo.networkType === "disconnected" ? root.theme.textMuted : root.theme.accentGreen
+                                    color: SystemInfo.networkType === "disconnected" ? root.theme.textMuted : root.theme.accentPrimary
                                     font.pixelSize: 14
                                     font.family: root.font
                                 }
@@ -488,7 +481,14 @@ Scope {
                                     font.pixelSize: 11
                                     font.family: root.font
                                 }
+
                             }
+                                MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            Quickshell.execDetached(["ghostty", "-e", "nmtui"]);
+                                        }
+                    }
                         }
 
                         // Temperature
@@ -508,13 +508,20 @@ Scope {
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: "󰔏"
-                                    color: root.theme.accentRed
+                                    color: root.theme.accentPrimary
                                     font.pixelSize: 14
                                     font.family: root.font
                                 }
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: SystemInfo.temperature
+                                    color: root.theme.textPrimary
+                                    font.pixelSize: 11
+                                    font.family: root.font
+                                }
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "℃"
                                     color: root.theme.textPrimary
                                     font.pixelSize: 11
                                     font.family: root.font

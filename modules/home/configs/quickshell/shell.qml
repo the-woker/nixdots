@@ -10,7 +10,7 @@ Scope {
 
     FileView {
         id: wallpaperFile
-        path: "/home/ratjerky/nixdots/modules/home/configs/quickshell/wallpaper.conf"
+        path: "/home/ratjerky/dotfiles/.config/quickshell/wallpaper.conf"
         watchChanges: true
 
         onFileChanged: reload()
