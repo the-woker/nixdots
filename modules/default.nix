@@ -8,7 +8,11 @@
 {
 
   _module.args = {
-    inherit inputs lib settings;
+    inherit
+      inputs
+      lib
+      settings
+      ;
     disks = [ "/dev/nvme0n1" ];
   };
 

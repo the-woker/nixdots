@@ -101,5 +101,6 @@ in
     gum
     helvum
     wofi
+    github-cli
   ];
 }

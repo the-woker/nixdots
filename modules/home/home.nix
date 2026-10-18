@@ -2,6 +2,7 @@
   config,
   settings,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -32,12 +33,12 @@ in
   home.homeDirectory = "/home/${settings.name}";
   home.stateVersion = "26.05";
 
-  programs.mangohud.enable = true;
 
-  xdg.configFile = builtins.mapAttrs (name: subpath: {
-    source = create_symlink "${dotfiles}/${subpath}";
-    recursive = true;
-  }) configs;
+  xdg.configFile =
+    (builtins.mapAttrs (name: subpath: {
+      source = create_symlink "${dotfiles}/${subpath}";
+      recursive = true;
+    }) configs);
 
   home.file.".config/starship.toml".source = ./configs/starship.toml;
 
