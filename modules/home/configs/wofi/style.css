@@ -1,0 +1,71 @@
+/* --- Master Container Window --- */
+window {
+    margin: 0px;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #242424;
+    border-radius: 6px;
+}
+
+/* --- Search Bar Container --- */
+#outer-box {
+    margin: 10px;
+    background-color: transparent;
+}
+
+/* --- Search Input Box --- */
+#input {
+    margin-bottom: 10px;
+    border: 1px solid #242424;
+    border-radius: 6px;
+    padding: 6px 12px;
+    background-color: #0a0a0a;
+    color: #ffffff;
+}
+
+/* --- Search Input when Focused --- */
+#input:focus {
+    border: 1px solid #ffffff;
+    box-shadow: none;
+    outline: none;
+}
+
+/* --- App List Container --- */
+#scroll {
+    margin: 0px;
+    background-color: transparent;
+}
+
+#text {
+    margin: 0px;
+    background-color: transparent;
+}
+
+/* --- Unselected List Items --- */
+#entry {
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+/* --- Active/Selected Item (Matching MangoWM active tag layout) --- */
+#entry:selected {
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+}
+
+/* Flip text to black when selected to match active workspace look */
+#entry:selected #text {
+    color: #000000;
+    background-color: transparent;
+}
+
+/* Ensure image/icon background goes transparent when selected */
+#entry:selected #img {
+    background-color: transparent;
+}

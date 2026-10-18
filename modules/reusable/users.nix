@@ -15,6 +15,7 @@
       "networkmanager"
       "bluetooth"
       "audio"
+      "input"
     ];
     packages = with pkgs; [ tree ];
     hashedPasswordFile = config.sops.secrets.passwd.path;

@@ -13,12 +13,12 @@ let
     alacritty = "alacritty";
     picom = "picom";
     waybar = "waybar";
-    quickshell = "quickshell";
     ghostty = "ghostty";
     fastfetch = "fastfetch";
     mango = "mango";
     tmux = "tmux";
     nvim = "nvim";
+    wofi = "wofi";
   };
 in
 {
