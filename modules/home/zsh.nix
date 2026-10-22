@@ -40,6 +40,7 @@
       CMAKE_GENERATOR = "Ninja";
       EDITOR = "nvim";
       BAT_THEME = "base16";
+      TZDIR = "/etc/zoneinfo";
     };
 
     initContent = ''

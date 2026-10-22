@@ -1,17 +1,14 @@
 return {
-	"folke/tokyonight.nvim",
+	"bjarneo/ash.nvim",
 	lazy = false,
 	priority = 1000,
 	opts = {
-		style = "night",
-		transparent = true,
-		styles = {
-			sidebars = "transparent",
-			floats = "transparent",
+		disable = {
+			background = true, -- Disables ash's solid background, using your terminal's transparent background
 		},
 	},
 	config = function(_, opts)
-		require("tokyonight").setup(opts)
-		vim.cmd.colorscheme("tokyonight-night")
+		require("ash").setup(opts)
+		vim.cmd("colorscheme ash")
 	end,
 }

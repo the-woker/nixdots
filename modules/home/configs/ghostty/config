@@ -18,5 +18,5 @@ palette = 13=#a7a7a7
 palette = 14=#b4b4b4
 palette = 15=#d5d5d5
 
-background-opacity = 0.8
+background-opacity = 0.5
 confirm-close-surface = false

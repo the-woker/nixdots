@@ -48,7 +48,8 @@
     },
 
     "clock": {
-        "format": "⏲ {:%H:%M}"
+        "timezone": "America/Vancouver",
+        "format": "⏲ {:%H:%M}",
     },
 
     "wireplumber": {

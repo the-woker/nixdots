@@ -15,7 +15,7 @@ let
 
   importAll =
     dir:
-    builtins.filter (file: hasSuffix ".nix" file && file != "default.nix") (
+    builtins.filter (file: hasSuffix ".nix" file && file != "default.nix" && file != "obs.nix") (
       builtins.attrNames (getDir dir)
     );
 

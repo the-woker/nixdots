@@ -33,42 +33,48 @@ let
     (extension "trackmenot-fork" "trackmenot-fork@paradonym")
     (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
   ];
+
+  # Force-override the broken fixed-output derivation hash from the flake
+  zenBrowserFixed =
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
+      (oldAttrs: {
+        src = oldAttrs.src.overrideAttrs (oldSrcAttrs: {
+          outputHash = "sha256-uyBF0+IWVNQP6EElAJLurf0sH8gx7vtQkiJ3PIvcoUk=";
+        });
+      });
 in
 {
   home.packages = [
-    (pkgs.wrapFirefox
-      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped
-      {
-        extraPrefs = lib.concatLines (
-          lib.mapAttrsToList (
-            name: value: "lockPref(${lib.strings.toJSON name}, ${lib.strings.toJSON value});"
-          ) prefs
-        );
+    (pkgs.wrapFirefox zenBrowserFixed {
+      extraPrefs = lib.concatLines (
+        lib.mapAttrsToList (
+          name: value: "lockPref(${lib.strings.toJSON name}, ${lib.strings.toJSON value});"
+        ) prefs
+      );
 
-        extraPolicies = {
-          DisableTelemetry = true;
-          ExtensionSettings = builtins.listToAttrs extensions;
+      extraPolicies = {
+        DisableTelemetry = true;
+        ExtensionSettings = builtins.listToAttrs extensions;
 
-          SearchEngines = {
-            Default = "ddg";
-            Add = [
-              {
-                Name = "nixpkgs packages";
-                URLTemplate = "https://search.nixos.org/packages?query={searchTerms}";
-                IconURL = "https://wiki.nixos.org/favicon.ico";
-                Alias = "@np";
-              }
-              {
-                Name = "Startpage";
-                URLTemplate = "https://www.startpage.com/sp/search?query={searchTerms}";
-                IconURL = "https://www.startpage.com/favicon.ico";
-                Alias = "@sp";
-              }
-            ];
-          };
+        SearchEngines = {
+          Default = "ddg";
+          Add = [
+            {
+              Name = "nixpkgs packages";
+              URLTemplate = "https://search.nixos.org/packages?query={searchTerms}";
+              IconURL = "https://wiki.nixos.org/favicon.ico";
+              Alias = "@np";
+            }
+            {
+              Name = "Startpage";
+              URLTemplate = "https://www.startpage.com/sp/search?query={searchTerms}";
+              IconURL = "https://www.startpage.com/favicon.ico";
+              Alias = "@sp";
+            }
+          ];
         };
-      }
-    )
+      };
+    })
   ];
 
   home.file = {
