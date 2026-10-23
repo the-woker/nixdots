@@ -28,6 +28,7 @@ in
         "mango"
         "tmux"
         "wofi"
+        "starship.toml"
       ];
     in
     builtins.listToAttrs (
@@ -38,15 +39,6 @@ in
         };
       }) apps
     );
-  # xdg.configFile =
-  #   builtins.mapAttrs (name: subpath: {
-  #     source = create_symlink "${dotfiles}/${subpath}";
-  #     recursive = true;
-  #   }) configs
-  # );
-
-  home.file.".config/starship.toml".source = ./configs/starship.toml;
-  # home.file."balls".source = inputs.test;
 
   programs.home-manager.enable = true;
   programs.ssh = {
