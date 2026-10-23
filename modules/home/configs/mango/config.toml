@@ -1,3 +1,0 @@
-[global]
-source = ["./theme.toml", "./bind.toml", "./layout.toml"]
-exec_once = ["pkill awww-daemon-wr;awww-daemon", "pkill awww;awww img ~/.config/mango/wallp/musashi.png", "pkill neko-mangowm;neko-mangowm HDMI-A-1"]

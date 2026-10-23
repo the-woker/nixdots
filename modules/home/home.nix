@@ -6,21 +6,7 @@
   ...
 }:
 let
-  dotfiles = "${config.home.homeDirectory}/nixdots/modules/home/configs";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
-
-  configs = {
-    rofi = "rofi";
-    alacritty = "alacritty";
-    picom = "picom";
-    waybar = "waybar";
-    ghostty = "ghostty";
-    fastfetch = "fastfetch";
-    mango = "mango";
-    tmux = "tmux";
-    nvim = "nvim";
-    wofi = "wofi";
-  };
 in
 {
   home.enableNixpkgsReleaseCheck = false;
@@ -32,15 +18,35 @@ in
   home.username = settings.name;
   home.homeDirectory = "/home/${settings.name}";
   home.stateVersion = "26.05";
-
-
   xdg.configFile =
-    (builtins.mapAttrs (name: subpath: {
-      source = create_symlink "${dotfiles}/${subpath}";
-      recursive = true;
-    }) configs);
+    let
+      apps = [
+        "nvim"
+        "waybar"
+        "ghostty"
+        "fastfetch"
+        "mango"
+        "tmux"
+        "wofi"
+      ];
+    in
+    builtins.listToAttrs (
+      map (name: {
+        inherit name;
+        value = {
+          source = "${inputs.configs}/${name}";
+        };
+      }) apps
+    );
+  # xdg.configFile =
+  #   builtins.mapAttrs (name: subpath: {
+  #     source = create_symlink "${dotfiles}/${subpath}";
+  #     recursive = true;
+  #   }) configs
+  # );
 
   home.file.".config/starship.toml".source = ./configs/starship.toml;
+  # home.file."balls".source = inputs.test;
 
   programs.home-manager.enable = true;
   programs.ssh = {

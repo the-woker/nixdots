@@ -1,26 +1,26 @@
 { pkgs, inputs, ... }:
 {
   boot = {
-    plymouth = {
-      enable = true;
-      theme = "evangelion-ui";
-      extraConfig = ''
-        [Daemon]
-        ShowDelay=0
-      '';
-      themePackages = [
-        (inputs.evangelion-ui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-          installPhase = ''
-            mkdir -p $out/share/plymouth/themes/evangelion-ui
-            cp evangelion-ui.plymouth evangelion-ui.script $out/share/plymouth/themes/evangelion-ui/
-            tar -xzf images.tar.gz -C $out/share/plymouth/themes/evangelion-ui/
-
-            substituteInPlace $out/share/plymouth/themes/evangelion-ui/evangelion-ui.plymouth \
-              --replace "EVANGELION_UI_PATH" "$out"
-          '';
-        }))
-      ];
-    };
+    # plymouth = {
+    #   enable = true;
+    #   theme = "evangelion-ui";
+    #   extraConfig = ''
+    #     [Daemon]
+    #     ShowDelay=0
+    #   '';
+    #   themePackages = [
+    #     (inputs.evangelion-ui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
+    #       installPhase = ''
+    #         mkdir -p $out/share/plymouth/themes/evangelion-ui
+    #         cp evangelion-ui.plymouth evangelion-ui.script $out/share/plymouth/themes/evangelion-ui/
+    #         tar -xzf images.tar.gz -C $out/share/plymouth/themes/evangelion-ui/
+    #
+    #         substituteInPlace $out/share/plymouth/themes/evangelion-ui/evangelion-ui.plymouth \
+    #           --replace "EVANGELION_UI_PATH" "$out"
+    #       '';
+    #     }))
+    #   ];
+    # };
     initrd.systemd.enable = true;
 
     consoleLogLevel = 3;
