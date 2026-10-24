@@ -21,7 +21,6 @@
     imports = [
       inputs.nvf.homeManagerModules.default
       ./home.nix
-      # ./neovim.nix
     ];
   };
 }

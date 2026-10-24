@@ -6,7 +6,6 @@
   ...
 }:
 let
-  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 in
 {
   home.enableNixpkgsReleaseCheck = false;

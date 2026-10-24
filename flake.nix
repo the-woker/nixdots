@@ -45,6 +45,7 @@
     neko = {
       url = "github:the-woker/neko-mangowm";
     };
+
     configs = {
       url = "github:the-woker/configs";
       flake = false;

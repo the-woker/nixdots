@@ -46,6 +46,20 @@
     initContent = ''
       bindkey -s '^T' 'tmux\n'
 
+
+      function udots() {
+        cd ~/configs || return 1
+        git add .
+        local files
+        files=$(git diff --cached --name-only | tr '\n' ',' | sed 's/,$//' | sed 's/,/, /g')
+        local msg="Update configs''${files:+: $files}"
+        git commit -m "$msg"
+        git push
+        cd ~/nixdots || return 1
+        nix flake update configs
+        sudo nixos-rebuild switch --flake ~/nixdots#nixos
+      }
+
       function y() {
         local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
         command yazi "$@" --cwd-file="$tmp"
