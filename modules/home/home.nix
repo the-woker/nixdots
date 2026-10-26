@@ -34,7 +34,7 @@ in
       map (name: {
         inherit name;
         value = {
-          source = "${inputs.configs}/${name}";
+          source = "${inputs.configs}/.config/${name}";
         };
       }) apps
     );
