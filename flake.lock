@@ -12,6 +12,7 @@
       },
       "original": {
         "owner": "the-woker",
+        "ref": "main",
         "repo": "configs",
         "type": "github"
       }

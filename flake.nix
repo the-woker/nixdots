@@ -47,7 +47,7 @@
     };
 
     configs = {
-      url = "github:the-woker/configs";
+      url = "github:the-woker/configs/main";
       flake = false;
     };
   };
