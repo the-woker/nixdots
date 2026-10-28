@@ -29,7 +29,6 @@
   home.sessionVariables = {
     XCURSOR_THEME = config.home.pointerCursor.name;
     XCURSOR_SIZE = toString config.home.pointerCursor.size;
-
     GDK_BACKEND = "wayland,x11";
   };
 }

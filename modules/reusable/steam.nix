@@ -33,7 +33,7 @@
   services.sunshine = {
     enable = true;
     autoStart = true;
-    capSysAdmin = true; # Necessary for KMS screen capture on Linux
-    openFirewall = true; # Automatically opens necessary UDP/TCP ports
+    capSysAdmin = true;
+    openFirewall = true;
   };
 }

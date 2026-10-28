@@ -1,26 +1,6 @@
 { pkgs, inputs, ... }:
 {
   boot = {
-    # plymouth = {
-    #   enable = true;
-    #   theme = "evangelion-ui";
-    #   extraConfig = ''
-    #     [Daemon]
-    #     ShowDelay=0
-    #   '';
-    #   themePackages = [
-    #     (inputs.evangelion-ui.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
-    #       installPhase = ''
-    #         mkdir -p $out/share/plymouth/themes/evangelion-ui
-    #         cp evangelion-ui.plymouth evangelion-ui.script $out/share/plymouth/themes/evangelion-ui/
-    #         tar -xzf images.tar.gz -C $out/share/plymouth/themes/evangelion-ui/
-    #
-    #         substituteInPlace $out/share/plymouth/themes/evangelion-ui/evangelion-ui.plymouth \
-    #           --replace "EVANGELION_UI_PATH" "$out"
-    #       '';
-    #     }))
-    #   ];
-    # };
     initrd.systemd.enable = true;
 
     consoleLogLevel = 3;
@@ -73,10 +53,10 @@
       grub.enable = false;
     };
   };
-  systemd.services.plymouth-quit = {
-    description = "Hold Plymouth splash screen for fast boot";
-    serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 4";
-  };
+  # systemd.services.plymouth-quit = {
+  #   description = "Hold Plymouth splash screen for fast boot";
+  #   serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 4";
+  # };
 
   systemd.services."getty@tty1" = {
     after = [ "plymouth-quit.service" ];

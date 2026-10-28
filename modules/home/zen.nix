@@ -21,10 +21,8 @@ let
   };
 
   prefs = {
-    # Check these out at about:config
     "extensions.autoDisableScopes" = 0;
     "extensions.pocket.enabled" = false;
-    # ...
   };
 
   extensions = [
@@ -34,7 +32,6 @@ let
     (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
   ];
 
-  # Force-override the broken fixed-output derivation hash from the flake
   zenBrowserFixed =
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
       (oldAttrs: {
