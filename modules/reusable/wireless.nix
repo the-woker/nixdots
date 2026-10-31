@@ -1,50 +1,55 @@
 {
   config,
+  settings,
+  lib,
   ...
 }:
+let
+  cfg = settings.systemSettings.font;
+in
 {
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings.General = {
-      experimental = true; # show battery
-
-      Privacy = "device";
-      JustWorksRepairing = "always";
-      Class = "0x000100";
-      FastConnectable = true;
-    };
-  };
-
-  hardware.xone.enable = true;
-  hardware.xpadneo.enable = true;
-  boot = {
-    extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
-    extraModprobeConfig = ''
-      options bluetooth disable_ertm=Y
-    '';
-  };
-
-  networking.networkmanager.enable = true;
-
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  services.blueman.enable = true;
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
+  config = lib.mkIf cfg.enable {
+    hardware.bluetooth = {
       enable = true;
-      addresses = true;
-      userServices = true;
-      workstation = true;
+      powerOnBoot = true;
+      settings.General = {
+        experimental = true; # show battery
+
+        Privacy = "device";
+        JustWorksRepairing = "always";
+        Class = "0x000100";
+        FastConnectable = true;
+      };
+    };
+
+    hardware.xone.enable = true;
+    hardware.xpadneo.enable = true;
+    boot = {
+      extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
+      extraModprobeConfig = ''
+        options bluetooth disable_ertm=Y
+      '';
+    };
+
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    services.blueman.enable = true;
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        userServices = true;
+        workstation = true;
+      };
     };
   };
 }

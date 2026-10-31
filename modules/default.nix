@@ -18,7 +18,6 @@
 
   imports = [
     inputs.sops-nix.nixosModules.sops
-    inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
     inputs.nix-flatpak.nixosModules.nix-flatpak
     inputs.mangowm.nixosModules.mango
@@ -26,6 +25,9 @@
     ./reusable
     ./system
     ./home
-  ];
+  ]
+  ++ (
+    if (settings.systemSettings.disko.enable == true) then [ inputs.disko.nixosModules.disko ] else [ ]
+  );
 
 }

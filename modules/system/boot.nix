@@ -53,13 +53,5 @@
       grub.enable = false;
     };
   };
-  # systemd.services.plymouth-quit = {
-  #   description = "Hold Plymouth splash screen for fast boot";
-  #   serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/sleep 4";
-  # };
 
-  systemd.services."getty@tty1" = {
-    after = [ "plymouth-quit.service" ];
-    wants = [ "plymouth-quit.service" ];
-  };
 }
