@@ -23,7 +23,6 @@ in
         "input"
       ];
       packages = with pkgs; [ tree ];
-      hashedPasswordFile = config.sops.secrets.passwd.path;
     };
   };
 }
