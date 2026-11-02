@@ -31,6 +31,7 @@ in
             "mango"
             "tmux"
             "wofi"
+            "waypaper"
             "starship.toml"
           ];
         in

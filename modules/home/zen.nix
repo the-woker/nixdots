@@ -38,7 +38,7 @@ let
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
       (oldAttrs: {
         src = oldAttrs.src.overrideAttrs (oldSrcAttrs: {
-          outputHash = "sha256-uyBF0+IWVNQP6EElAJLurf0sH8gx7vtQkiJ3PIvcoUk=";
+          outputHash = "sha256-Mj8mguc+OCR6UfvMdeVijtK7m0BNsAz5zxavMpqRb64=";
         });
       });
   cfg = settings.homeSettings.zen;

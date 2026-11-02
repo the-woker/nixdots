@@ -1,10 +1,8 @@
 { pkgs, inputs, ... }:
 {
   boot = {
-    initrd.systemd.enable = true;
 
     consoleLogLevel = 3;
-    initrd.verbose = false;
     initrd.kernelModules = [
       "nvidia"
       "nvidia_modeset"

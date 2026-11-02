@@ -38,6 +38,10 @@
       url = "git+https://codeberg.org/woker/nix-cpp-template";
     };
 
+    waypaper = {
+      url = "github:the-woker/waypaper-flake";
+    };
+
     fibpass = {
       url = "github:the-woker/fibpass";
     };
