@@ -55,11 +55,6 @@ in
       icu
       age
       sops
-      qt6.qtmultimedia
-      qt6.qt5compat
-      qt6.qtsvg
-      qt6.qtimageformats
-      qt6.qtwayland
       yazi
       discord
       vlc
@@ -102,10 +97,13 @@ in
       wofi
       github-cli
     ]
-    ++ [
-      inputs.newp.packages.x86_64-linux.default
-      inputs.waypaper.packages.x86_64-linux.default
-      inputs.fibpass.packages.x86_64-linux.default
-      inputs.neko.packages.x86_64-linux.default
-    ];
+    ++ map targetSystem (
+      with inputs;
+      [
+        newp
+        waypaper
+        fibpass
+        neko
+      ]
+    );
 }
