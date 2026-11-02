@@ -19,7 +19,6 @@
   };
   home-manager.users.${settings.name} = {
     imports = [
-      inputs.nvf.homeManagerModules.default
       ./home.nix
     ];
   };

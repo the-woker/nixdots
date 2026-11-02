@@ -4,6 +4,7 @@
   ...
 }:
 let
+  targetSystem = pkg: pkg.packages.x86_64-linux.default;
 in
 {
   nixpkgs.config.permittedInsecurePackages = [
@@ -61,7 +62,6 @@ in
       protonup-qt
       unrar
       pdf4qt
-      qt5.qtgraphicaleffects
       quickshell
       jq
       limine-full
