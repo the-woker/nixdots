@@ -1,4 +1,10 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  lib,
+  settings,
+  ...
+}:
 let
   nvidiaStuff = [
     "nvidia"
@@ -13,11 +19,11 @@ in
     consoleLogLevel = 3;
     initrd.kernelModules = [
     ]
-    ++ lib.optional settings.systemSettings.nvidia.enable nvidiaStuff;
+    ++ lib.optionals settings.systemSettings.nvidia.enable nvidiaStuff;
 
     initrd.availableKernelModules = [
     ]
-    ++ lib.optional settings.systemSettings.nvidia.enable nvidiaStuff;
+    ++ lib.optionals settings.systemSettings.nvidia.enable nvidiaStuff;
 
     kernelParams = [
       "quiet"
@@ -25,7 +31,7 @@ in
       "rd.udev.log_level=3"
       "rd.systemd.show_status=auto"
     ]
-    ++ lib.optional settings.systemSettings.nvidia.enable [
+    ++ lib.optionals settings.systemSettings.nvidia.enable [
       "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
     ];
