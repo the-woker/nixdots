@@ -18,7 +18,6 @@
 
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ./reusable
     ./system
     ./home
   ]
