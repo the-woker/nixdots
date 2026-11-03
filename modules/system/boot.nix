@@ -1,31 +1,32 @@
 { pkgs, inputs, ... }:
+let
+  nvidiaStuff = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
+in
 {
   boot = {
 
     consoleLogLevel = 3;
     initrd.kernelModules = [
-      "nvidia"
-      "nvidia_modeset"
-      "nvidia_uvm"
-      "nvidia_drm"
-    ];
-
+    ]
+    ++ lib.optional settings.systemSettings.nvidia.enable nvidiaStuff;
     initrd.availableKernelModules = [
-      "nvidia"
-      "nvidia_modeset"
-      "nvidia_uvm"
-      "nvidia_drm"
-    ];
+    ]
+    ++ lib.optional settings.systemSettings.nvidia.enable nvidiaStuff;
 
     kernelParams = [
       "quiet"
       "splash"
       "rd.udev.log_level=3"
       "rd.systemd.show_status=auto"
+    ]
+    ++ lib.optional settings.systemSettings.nvidia.enable [
       "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
-      "plymouth.use-simpledrm"
-      "plymouth.ignore-serial-consoles"
     ];
 
     kernelPackages = pkgs.linuxPackages_latest;

@@ -13,7 +13,7 @@ in
       disk = {
         main = {
           type = "disk";
-          device = "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b425a2822";
+          device = "/dev/nvme0n1";
           content = {
             type = "gpt";
             partitions = {
