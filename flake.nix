@@ -46,7 +46,7 @@
     };
 
     configs = {
-      url = "github:the-woker/configs/main";
+      url = "github:the-woker/configs/thinkpad";
       flake = false;
     };
   };

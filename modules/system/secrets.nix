@@ -41,10 +41,10 @@ in
       };
 
       sops = {
-        age = {
-          keyFile = "/var/lib/sops-nix/key.txt";
-        };
         defaultSopsFile = ../../secrets/secrets.yaml;
+        age.keyFile = "/var/lib/sops-nix/key.txt";
+        age.sshKeyPaths = [ ];
+        gnupg.sshKeyPaths = [ ];
       };
 
       sops.secrets.ssh-private = {

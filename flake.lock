@@ -3,16 +3,16 @@
     "configs": {
       "flake": false,
       "locked": {
-        "lastModified": 1793565607,
-        "narHash": "sha256-4DHQ6oNf3gkMOmjV/2pP9wbQzS2SdvDoMfXILOPZrYo=",
+        "lastModified": 1793722236,
+        "narHash": "sha256-QoIA/FS15XLN4ByTxJ5UJcNGc40YjGdO8PEzoX1bSsQ=",
         "owner": "the-woker",
         "repo": "configs",
-        "rev": "b3c2f340457f3455814cd5a3b149e2ecdefcb4b3",
+        "rev": "a7ecb08c3cb015142e51eeaab6088f6c12d7c890",
         "type": "github"
       },
       "original": {
         "owner": "the-woker",
-        "ref": "main",
+        "ref": "thinkpad",
         "repo": "configs",
         "type": "github"
       }

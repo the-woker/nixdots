@@ -12,7 +12,7 @@
     font.enable = true;
     mango.enable = true;
     network.enable = true;
-    nvidia.enable = true;
+    nvidia.enable = false;
     obs.enable = false;
     sops.enable = true;
     steam.enable = true;
