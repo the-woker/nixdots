@@ -46,13 +46,12 @@ if not os.path.exists("/media/keys.txt"):
 
 os.makedirs("/mnt/var/lib/sops-nix/", exist_ok=True)
 
-shutil.copy("/media/keys.txt", "/mnt/var/lib/sops-nix/keys.txt")
+shutil.copy("/media/keys.txt", "/mnt/var/lib/sops-nix/key.txt")
 
 
 subprocess.run(["umount", mountpoint], check=True)
 subprocess.run(
-    ["nixos-install", "--flake", ".#nixos", "--root", "/mnt"],
-    cwd=script_dir,
+    ["nixos-install", "--flake", ".#nixos", "--root", "/mnt"], cwd=script_dir,
     check=True,
 )
 
