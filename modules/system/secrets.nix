@@ -42,7 +42,7 @@ in
 
       sops = {
         age = {
-          keyFile = "/home/${settings.name}/.config/sops/age/keys.txt";
+          keyFile = "/var/lib/sops-nix/key.txt";
         };
         defaultSopsFile = ../../secrets/secrets.yaml;
       };

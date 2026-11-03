@@ -5,10 +5,7 @@
   ...
 }:
 let
-  cfg = settings.systemSettings.font;
-in
-let
-  cfg = settings.systemSettings.font;
+  cfg = settings.systemSettings.disko;
 in
 {
   config = lib.mkIf cfg.enable {
