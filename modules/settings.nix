@@ -8,7 +8,7 @@
   };
   systemSettings = {
     disko.enable = true;
-    flatpak.enable = true;
+    flatpak.enable = false;
     font.enable = true;
     mango.enable = true;
     network.enable = true;

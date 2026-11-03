@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   pkgs,
   lib,
@@ -9,6 +10,9 @@ let
   cfg = settings.systemSettings.sops;
 in
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
   config = lib.mkMerge [
     {
       programs.ssh.startAgent = true;
