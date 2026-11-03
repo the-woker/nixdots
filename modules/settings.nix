@@ -7,6 +7,7 @@
     theme.enable = true;
   };
   systemSettings = {
+    windows.enable = true;
     disko.enable = true;
     flatpak.enable = true;
     font.enable = true;
