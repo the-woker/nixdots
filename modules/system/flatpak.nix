@@ -8,6 +8,7 @@ let
   cfg = settings.systemSettings.flatpak;
 in
 {
+  imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
   config = lib.mkIf cfg.enable {
     services.flatpak.enable = true;
 

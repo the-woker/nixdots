@@ -8,6 +8,9 @@ let
   cfg = settings.systemSettings.disko;
 in
 {
+  imports = [
+    inputs.disko.nixosModules.disko
+  ];
   config = lib.mkIf cfg.enable {
     disko.devices = {
       disk = {

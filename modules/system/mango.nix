@@ -8,6 +8,7 @@ let
   cfg = settings.systemSettings.mango;
 in
 {
+  imports = [ inputs.mangowm.nixosModules.mango ];
   config = lib.mkIf cfg.enable {
     programs.mango.enable = true;
     programs.waybar = {
