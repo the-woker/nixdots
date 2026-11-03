@@ -11,7 +11,7 @@ in
 {
   config = lib.mkIf cfg.enable {
     users.defaultUserShell = pkgs.zsh;
-    users.mutableUsers = false;
+    users.mutableUsers = true;
     services.getty.autologinUser = settings.name;
     users.users.${settings.name} = {
       isNormalUser = true;
