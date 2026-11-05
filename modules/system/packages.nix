@@ -96,6 +96,7 @@ in
       helvum
       wofi
       github-cli
+      vm-curator
     ]
     ++ map targetSystem (
       with inputs;
