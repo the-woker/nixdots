@@ -3,11 +3,11 @@
     "configs": {
       "flake": false,
       "locked": {
-        "lastModified": 1793565607,
-        "narHash": "sha256-4DHQ6oNf3gkMOmjV/2pP9wbQzS2SdvDoMfXILOPZrYo=",
+        "lastModified": 1793754662,
+        "narHash": "sha256-t6qTjid/8dzcDv9/H8C8Poqe4RlW2bY9hPVELYgle6w=",
         "owner": "the-woker",
         "repo": "configs",
-        "rev": "b3c2f340457f3455814cd5a3b149e2ecdefcb4b3",
+        "rev": "13a70687e7cb3fcc8f954ac4448d48ae054db3c4",
         "type": "github"
       },
       "original": {

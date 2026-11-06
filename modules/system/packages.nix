@@ -96,6 +96,7 @@ in
       helvum
       wofi
       github-cli
+      upscayl-ncnn
     ]
     ++ map targetSystem (
       with inputs;
