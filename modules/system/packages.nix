@@ -62,7 +62,6 @@ in
       protonup-qt
       unrar
       pdf4qt
-      quickshell
       jq
       limine-full
       ghostty
@@ -96,6 +95,14 @@ in
       helvum
       wofi
       github-cli
+      brightnessctl
+      upscaler
+      masterpdfeditor4
+      gimp
+      innoextract
+      vm-curator
+      xset
+      mpv
     ]
     ++ map targetSystem (
       with inputs;

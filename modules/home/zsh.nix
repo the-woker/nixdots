@@ -19,7 +19,7 @@ in
       shellAliases = {
 
         ns = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}'";
-        pkg = "nvim ~/nixdots/modules/reusable/packages.nix && nrs";
+        pkg = "nvim ~/nixdots/modules/system/packages.nix && nrs";
         npa = "nix profile add .";
         die = "shutdown -h now";
         nrs = "sudo nixos-rebuild switch --flake ~/nixdots#nixos";

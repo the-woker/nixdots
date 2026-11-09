@@ -31,7 +31,6 @@ in
             "mango"
             "tmux"
             "wofi"
-            "waypaper"
             "starship.toml"
           ];
         in
@@ -57,6 +56,18 @@ in
           genericName = "Color Picker";
           name = "Color Picker";
           terminal = false;
+        };
+
+        vm-curator = {
+          name = "VM Curator";
+          comment = "QEMU/KVM virtual machine manager";
+          exec = "ghostty -e vm-curator";
+          icon = "utilities-terminal";
+          terminal = false;
+          categories = [
+            "System"
+            "Emulator"
+          ];
         };
       };
       programs.git.enable = true;

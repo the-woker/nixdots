@@ -59,7 +59,7 @@ in
         neededForUsers = true;
       };
 
-      # users.users.${settings.name}.hashedPasswordFile = config.sops.secrets.passwd.path;
+      users.users.${settings.name}.hashedPasswordFile = config.sops.secrets.passwd.path;
     })
   ];
 }

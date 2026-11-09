@@ -7,13 +7,13 @@
     theme.enable = true;
   };
   systemSettings = {
-    windows.enable = true;
+    windows.enable = false;
     disko.enable = true;
-    flatpak.enable = true;
+    flatpak.enable = false;
     font.enable = true;
     mango.enable = true;
     network.enable = true;
-    nvidia.enable = true;
+    nvidia.enable = false;
     obs.enable = false;
     sops.enable = true;
     steam.enable = true;

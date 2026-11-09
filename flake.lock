@@ -3,16 +3,16 @@
     "configs": {
       "flake": false,
       "locked": {
-        "lastModified": 1793565607,
-        "narHash": "sha256-4DHQ6oNf3gkMOmjV/2pP9wbQzS2SdvDoMfXILOPZrYo=",
+        "lastModified": 1794245442,
+        "narHash": "sha256-R/ZJ16oriP/xFpqtW8XjVEAkdu+bE6K3ltMi8WvVTQo=",
         "owner": "the-woker",
         "repo": "configs",
-        "rev": "b3c2f340457f3455814cd5a3b149e2ecdefcb4b3",
+        "rev": "15f293a131252210ff39962e6ff39886d3fa7083",
         "type": "github"
       },
       "original": {
         "owner": "the-woker",
-        "ref": "main",
+        "ref": "thinkpad",
         "repo": "configs",
         "type": "github"
       }
@@ -57,11 +57,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1789678765,
-        "narHash": "sha256-3f9aDBGJ/BV+CTHNw/CX8QnNp1nzJRilgOyEZ+mz550=",
+        "lastModified": 1793996791,
+        "narHash": "sha256-DOmQGrApjASw43t/q8TZlm4NeU5K3Say9IINtmUc77w=",
         "owner": "the-woker",
         "repo": "fibpass",
-        "rev": "487efcbe6a31d2024744e75f530671bc5c2e29c7",
+        "rev": "ffd229c97af91183ab03e02b78810fa9136db142",
         "type": "github"
       },
       "original": {
