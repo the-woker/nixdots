@@ -1,25 +1,19 @@
 {
   inputs,
-  settings,
   pkgs,
-  dots,
+  settings,
   ...
 }:
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.backupFileExtension = "backup";
-
-  home-manager.extraSpecialArgs = {
-    inherit
-      inputs
-      pkgs
-      settings
-      ;
-  };
-  home-manager.users.${settings.name} = {
-    imports = [
+  ${settings.name} = inputs.home-manager.lib.homeManagerConfiguration {
+    inherit pkgs;
+    extraSpecialArgs = {
+      inherit
+        inputs
+        settings
+        ;
+    };
+    modules = [
       ./home.nix
     ];
   };

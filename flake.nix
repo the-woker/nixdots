@@ -54,6 +54,7 @@
   outputs =
     {
       nixpkgs,
+      home-manager,
       nix-flatpak,
       mangowm,
       ...
@@ -75,6 +76,10 @@
             ./modules
           ];
         };
+      };
+
+      homeConfigurations = import ./modules/home {
+        inherit inputs pkgs settings;
       };
     };
 }

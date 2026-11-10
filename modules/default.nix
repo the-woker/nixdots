@@ -18,7 +18,6 @@
 
   imports = [
     ./system
-    ./home
   ];
 
 }
