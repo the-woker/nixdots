@@ -103,7 +103,6 @@ in
       with inputs;
       [
         newp
-        waypaper
         fibpass
         neko
       ]
