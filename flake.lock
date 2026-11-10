@@ -304,22 +304,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
-      "locked": {
-        "lastModified": 1793341285,
-        "narHash": "sha256-Y1CiZ4SoBUjLQyQM/pY+rS2dXD3CHLPstF0lmOc73D4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "1c89083e451e891152365b799595cf7790a43325",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "configs": "configs",
@@ -332,7 +316,6 @@
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_4",
         "sops-nix": "sops-nix",
-        "waypaper": "waypaper",
         "zen-browser": "zen-browser"
       }
     },
@@ -427,24 +410,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "waypaper": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_5"
-      },
-      "locked": {
-        "lastModified": 1793564024,
-        "narHash": "sha256-WWs7SN/CZ+vPVUsF1jkeyV4VIfPS9QE2RN273SaxqP8=",
-        "owner": "the-woker",
-        "repo": "waypaper-flake",
-        "rev": "207baed91dd23a3acc04e6d27534d72db09fe203",
-        "type": "github"
-      },
-      "original": {
-        "owner": "the-woker",
-        "repo": "waypaper-flake",
         "type": "github"
       }
     },
