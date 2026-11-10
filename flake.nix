@@ -76,5 +76,9 @@
           ];
         };
       };
+
+      homeConfigurations = import ./modules/home {
+        inherit inputs pkgs settings;
+      };
     };
 }
