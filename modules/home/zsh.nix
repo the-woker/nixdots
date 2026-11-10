@@ -67,9 +67,8 @@ in
           local msg="Update configs''${files:+: $files}"
           git commit -m "$msg"
           git push
-          cd ~/nixdots || return 1
-          nix flake update configs
-          sudo nixos-rebuild switch --flake ~/nixdots#nixos
+          nix flake update configs --flake ~/nixdots
+          home-manager switch --flake ~/nixdots
         }
 
         function y() {
