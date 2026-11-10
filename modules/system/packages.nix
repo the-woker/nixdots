@@ -97,7 +97,7 @@ in
       wofi
       github-cli
       upscayl-ncnn
-      vm-curator
+      pciutils
     ]
     ++ map targetSystem (
       with inputs;

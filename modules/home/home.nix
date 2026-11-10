@@ -58,6 +58,17 @@ in
           name = "Color Picker";
           terminal = false;
         };
+        vm-curator = {
+          name = "VM Curator";
+          genericName = "QEMU/KVM Virtual Machine Manager";
+          comment = "Manage desktop KVM virtual machines in a TUI";
+          exec = "ghostty -e vm-curator";
+          icon = "utilities-terminal";
+          categories = [
+            "System"
+            "Emulator"
+          ];
+        };
       };
       programs.git.enable = true;
       programs.git.settings.user.name = "woker";

@@ -1,6 +1,5 @@
 {
-  pkgs,
-  inputs,
+  pkgs, inputs,
   lib,
   settings,
   ...
@@ -17,6 +16,8 @@ in
   boot = {
 
     consoleLogLevel = 3;
+    kernelModules = [
+    ];
     initrd.kernelModules = [
     ]
     ++ lib.optionals settings.systemSettings.nvidia.enable nvidiaStuff;
