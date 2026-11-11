@@ -15,7 +15,7 @@
     mango.enable = true;
     nvidia.enable = true;
     network.enable = true;
-    obs.enable = false;
+    obs.enable = true;
     sops.enable = true;
     steam.enable = true;
     users.enable = true;
