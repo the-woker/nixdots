@@ -2,16 +2,13 @@
   pkgs,
   inputs,
   ...
-}:
-let
+}: let
   targetSystem = pkg: pkg.packages.x86_64-linux.default;
-in
-{
+in {
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
-  environment.systemPackages =
-    with pkgs;
+  environment.systemPackages = with pkgs;
     [
       vim
       wget
@@ -85,7 +82,6 @@ in
       wine
       nix-search-tv
       bluez-experimental
-      neovim
       nixfmt
       bluetui
       lutris
@@ -100,8 +96,7 @@ in
       pciutils
     ]
     ++ map targetSystem (
-      with inputs;
-      [
+      with inputs; [
         newp
         fibpass
         neko

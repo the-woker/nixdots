@@ -5,11 +5,10 @@
   pkgs,
   inputs,
   ...
-}:
-let
+}: let
+  targetSystem = pkg: pkg.packages.x86_64-linux.default;
   cfg = settings.systemSettings.sops;
-in
-{
+in {
   imports = [
     ./theme.nix
     ./zsh.nix
@@ -17,38 +16,51 @@ in
   ];
   config = lib.mkMerge [
     {
+      home.packages = with pkgs;
+        [
+          clang-tools
+
+          gcc
+          cmake
+          ninja
+          gdb
+        ]
+        ++ map targetSystem (
+          with inputs; [
+            nvim
+            fetch
+          ]
+        );
       home.enableNixpkgsReleaseCheck = false;
       home.username = settings.name;
       home.homeDirectory = "/home/${settings.name}";
       home.stateVersion = "26.05";
-      xdg.configFile =
-        let
-          apps = [
-            "nvim"
-            "waybar"
-            "ghostty"
-            "fastfetch"
-            "mango"
-            "tmux"
-            "wofi"
-            "wallp"
-            "starship.toml"
-          ];
-        in
+      xdg.configFile = let
+        apps = [
+          "waybar"
+          "ghostty"
+          "fastfetch"
+          "mango"
+          "tmux"
+          "wofi"
+          "wallp"
+          "starship.toml"
+        ];
+      in
         builtins.listToAttrs (
           map (name: {
             inherit name;
             value = {
               source = "${inputs.configs}/${name}";
             };
-          }) apps
+          })
+          apps
         );
 
       programs.home-manager.enable = true;
       programs.ssh = {
         enable = true;
         enableDefaultConfig = false;
-
       };
 
       xdg.desktopEntries = {
@@ -84,5 +96,4 @@ in
       };
     })
   ];
-
 }
