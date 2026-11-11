@@ -73,8 +73,6 @@
         };
       };
 
-      homeConfigurations = import ./modules/home {
-        inherit inputs pkgs settings;
-      };
+      homeConfigurations = import ./modules/home { inherit inputs pkgs settings; };
     };
 }
