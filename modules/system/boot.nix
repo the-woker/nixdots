@@ -1,42 +1,25 @@
 {
-  pkgs, inputs,
+  pkgs,
+  inputs,
   lib,
   settings,
   ...
 }:
-let
-  nvidiaStuff = [
-    "nvidia"
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
-  ];
-in
 {
   boot = {
 
     consoleLogLevel = 3;
-    kernelModules = [
-    ];
-    initrd.kernelModules = [
-    ]
-    ++ lib.optionals settings.systemSettings.nvidia.enable nvidiaStuff;
+    kernelModules = [ ];
+    initrd.kernelModules = [ ];
 
-    initrd.availableKernelModules = [
-    ]
-    ++ lib.optionals settings.systemSettings.nvidia.enable nvidiaStuff;
+    initrd.availableKernelModules = [ ];
 
     kernelParams = [
       "quiet"
       "splash"
       "rd.udev.log_level=3"
       "rd.systemd.show_status=auto"
-    ]
-    ++ lib.optionals settings.systemSettings.nvidia.enable [
-      "nvidia-drm.modeset=1"
-      "nvidia-drm.fbdev=1"
     ];
-
     kernelPackages = pkgs.linuxPackages_latest;
 
     loader = {

@@ -22,9 +22,9 @@ in
         pkg = "nvim ~/nixdots/modules/system/packages.nix && nrs";
         npa = "nix profile add .";
         die = "shutdown -h now";
-        nrs = "sudo nixos-rebuild switch --flake ~/nixdots#nixos";
-        hms = "home-manager switch -b backup --flake ~/nixdots";
-        hmup = "nix flake update configs --flake ~/nixdots && home-manager switch -b backup --flake ~/nixdots";
+        nrs = "sudo nixos-rebuild switch --flake ~/nixdots#${settings.hostname}";
+        hms = "home-manager switch --flake ~/nixdots#${settings.name}@${settings.hostname}";
+        hmup = "nix flake update configs --flake ~/nixdots && home-manager switch -b backup --flake ~/nixdots#${settings.name}@${settings.hostname}";
         tat = "tmux attach -t";
         tns = "tmux new-session";
         lg = "lazygit";

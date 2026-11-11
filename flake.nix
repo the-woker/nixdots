@@ -55,24 +55,42 @@
       ...
     }@inputs:
     let
-      settings = import ./modules/settings.nix;
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
       };
       lib = inputs.nixpkgs.lib;
+      mkHost =
+        host: disks:
+        lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs disks;
+            settings = import ./hosts/${host}/settings.nix;
+          };
+          modules = [
+            ./hosts/${host}
+          ];
+        };
+
+      mkHome =
+        host:
+        let
+          settings = import ./hosts/${host}/settings.nix;
+        in
+        (import ./modules/home {
+          inherit inputs pkgs settings;
+        }).${settings.name};
     in
     {
       nixosConfigurations = {
-        nixos = lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs settings; };
-          modules = [
-            ./modules
-          ];
-        };
+        desktop = mkHost "desktop" [ "/dev/nvme0n1" ];
+        thinkpad = mkHost "thinkpad" [ "/dev/nvme0n1" ]; # <-- Adjust ThinkPad's drive path if needed
       };
 
-      homeConfigurations = import ./modules/home { inherit inputs pkgs settings; };
+      homeConfigurations = {
+        "ratjerky@desktop" = mkHome "desktop";
+        "ratjerky@thinkpad" = mkHome "thinkpad";
+      };
     };
 }
