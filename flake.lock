@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "configs": {
+    "configs-main": {
       "flake": false,
       "locked": {
         "lastModified": 1794500508,
@@ -12,7 +12,23 @@
       },
       "original": {
         "owner": "the-woker",
-        "ref": "main",
+        "repo": "configs",
+        "type": "github"
+      }
+    },
+    "configs-thinkpad": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794342637,
+        "narHash": "sha256-reUlobb0mqOYgxfhiADlt2G7opSOCrtgdvYGn+Wv78k=",
+        "owner": "the-woker",
+        "repo": "configs",
+        "rev": "f536f7a81235c929b27e14c0b92e875f45688eba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-woker",
+        "ref": "thinkpad",
         "repo": "configs",
         "type": "github"
       }
@@ -391,7 +407,8 @@
     },
     "root": {
       "inputs": {
-        "configs": "configs",
+        "configs-main": "configs-main",
+        "configs-thinkpad": "configs-thinkpad",
         "disko": "disko",
         "fetch": "fetch",
         "fibpass": "fibpass",

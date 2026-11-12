@@ -8,6 +8,8 @@
 }: let
   targetSystem = pkg: pkg.packages.x86_64-linux.default;
   cfg = settings.systemSettings.sops;
+  branch = settings.confBranch or "main";
+  configsSrc = inputs."configs-${branch}";
 in {
   imports = [
     ./theme.nix
@@ -51,7 +53,7 @@ in {
           map (name: {
             inherit name;
             value = {
-              source = "${inputs.configs}/${name}";
+              source = "${configsSrc}/${name}";
             };
           })
           apps

@@ -58,7 +58,6 @@ in {
       vlc
       protonup-qt
       unrar
-      pdf4qt
       quickshell
       jq
       limine-full
@@ -95,6 +94,7 @@ in {
       upscayl-ncnn
       pciutils
       wl-clip-persist
+      masterpdfeditor4
     ]
     ++ map targetSystem (
       with inputs; [

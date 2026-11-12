@@ -41,58 +41,59 @@
       url = "github:the-woker/neko-mangowm";
     };
 
-    configs = {
-      url = "github:the-woker/configs/main";
+    configs-main = {
+      url = "github:the-woker/configs";
+      flake = false;
+    };
+
+    configs-thinkpad = {
+      url = "github:the-woker/configs/thinkpad";
       flake = false;
     };
     nvim.url = "github:the-woker/nvim";
     fetch.url = "github:areofyl/fetch";
   };
 
-  outputs =
-    {
-      nixpkgs,
-      nix-flatpak,
-      mangowm,
-      ...
-    }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-      };
-      lib = inputs.nixpkgs.lib;
-      mkHost =
-        host: disks:
-        lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs disks;
-            settings = import ./hosts/${host}/settings.nix;
-          };
-          modules = [
-            ./hosts/${host}
-          ];
-        };
-
-      mkHome =
-        host:
-        let
-          settings = import ./hosts/${host}/settings.nix;
-        in
-        (import ./modules/home {
-          inherit inputs pkgs settings;
-        }).${settings.name};
-    in
-    {
-      nixosConfigurations = {
-        desktop = mkHost "desktop" [ "/dev/nvme0n1" ];
-        thinkpad = mkHost "thinkpad" [ "/dev/nvme0n1" ];
-      };
-
-      homeConfigurations = {
-        "ratjerky@desktop" = mkHome "desktop";
-        "ratjerky@thinkpad" = mkHome "thinkpad";
-      };
+  outputs = {
+    nixpkgs,
+    nix-flatpak,
+    mangowm,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
     };
+    lib = inputs.nixpkgs.lib;
+    mkHost = host: disks:
+      lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs disks;
+          settings = import ./hosts/${host}/settings.nix;
+        };
+        modules = [
+          ./hosts/${host}
+        ];
+      };
+
+    mkHome = host: let
+      settings = import ./hosts/${host}/settings.nix;
+    in
+      (import ./modules/home {
+        inherit inputs pkgs settings;
+      }).${
+        settings.name
+      };
+  in {
+    nixosConfigurations = {
+      desktop = mkHost "desktop" ["/dev/nvme0n1"];
+      thinkpad = mkHost "thinkpad" ["/dev/nvme0n1"];
+    };
+
+    homeConfigurations = {
+      "ratjerky@desktop" = mkHome "desktop";
+      "ratjerky@thinkpad" = mkHome "thinkpad";
+    };
+  };
 }

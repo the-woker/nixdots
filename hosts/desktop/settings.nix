@@ -2,6 +2,7 @@
   name = "ratjerky";
   email = "wokerNM@proton.me";
   hostname = "desktop";
+  confBranch = "main";
   homeSettings = {
     zen.enable = true;
     zsh.enable = true;
