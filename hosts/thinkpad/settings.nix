@@ -1,6 +1,7 @@
 {
   name = "ratjerky";
   email = "wokerNM@proton.me";
+  hostname = "thinkpad";
   homeSettings = {
     zen.enable = true;
     zsh.enable = true;

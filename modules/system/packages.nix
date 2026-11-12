@@ -94,6 +94,7 @@ in {
       github-cli
       upscayl-ncnn
       pciutils
+      wl-clip-persist
     ]
     ++ map targetSystem (
       with inputs; [
