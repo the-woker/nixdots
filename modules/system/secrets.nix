@@ -5,11 +5,9 @@
   settings,
   inputs,
   ...
-}:
-let
+}: let
   cfg = settings.systemSettings.sops;
-in
-{
+in {
   imports = [
     inputs.sops-nix.nixosModules.sops
   ];
@@ -19,7 +17,7 @@ in
 
       users.users.${settings.name} = {
         isNormalUser = true;
-        extraGroups = [ "wheel" ];
+        extraGroups = ["wheel"];
 
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNivWdMTdBODE1BcY+APzPEoDQuMSEGnxsV3+92m7q nick@nixos"
@@ -32,15 +30,16 @@ in
     (lib.mkIf cfg.enable {
       systemd.user.services.add-nick-ssh-key = {
         description = "Load your SSH key on login";
-        after = [ "default.target" ];
-        wantedBy = [ "default.target" ];
+        after = ["ssh-agent.service"];
+        bindsTo = ["ssh-agent.service"];
+        wantedBy = ["ssh-agent.service"];
 
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;
           Environment = "SSH_AUTH_SOCK=%t/ssh-agent";
           ExecStartPre = "${pkgs.coreutils}/bin/test -e ${config.sops.secrets.ssh-private.path}";
           ExecStart = "${pkgs.openssh}/bin/ssh-add ${config.sops.secrets.ssh-private.path}";
-          RemainAfterExit = true;
         };
       };
 

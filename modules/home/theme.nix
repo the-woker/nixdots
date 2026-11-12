@@ -21,6 +21,13 @@ in {
       size = 24;
     };
 
+    dconf.settings = {
+      "org/gnome/desktop/interface" = {
+        color-scheme = "prefer-dark";
+        gtk-theme = "Tokyonight-Dark";
+      };
+    };
+
     gtk = {
       enable = true;
       theme = {
@@ -30,6 +37,12 @@ in {
       iconTheme = {
         name = "Tokyonight-Dark";
         package = pkgs.tokyonight-gtk-theme;
+      };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
       };
     };
 
