@@ -231,11 +231,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1794517434,
-        "narHash": "sha256-UrjLtjt1RrEmPH9ObAg51PFSH8iVoSdY3DErCM3WHEM=",
+        "lastModified": 1794517806,
+        "narHash": "sha256-XITJTls0HWRxlKn+QGMFACAD+IfqCvD/vTQOpM3KtAQ=",
         "owner": "the-woker",
         "repo": "newp",
-        "rev": "9c60f3fb82759d335ef2f17b52b1391a9bbacd6b",
+        "rev": "9ce2d640cd172e75dc19b777c750ac2c67c03658",
         "type": "github"
       },
       "original": {
