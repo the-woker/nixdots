@@ -95,6 +95,7 @@ in {
       pciutils
       wl-clip-persist
       masterpdfeditor4
+      brightnessctl
     ]
     ++ map targetSystem (
       with inputs; [

@@ -4,15 +4,13 @@
   config,
   settings,
   ...
-}:
-let
+}: let
   cfg = settings.homeSettings.zsh;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      adwaita-icon-theme
       gnome-themes-extra
+      tokyonight-gtk-theme
     ];
 
     home.pointerCursor = {
@@ -26,12 +24,12 @@ in
     gtk = {
       enable = true;
       theme = {
-        name = "Adwaita";
-        package = pkgs.gnome-themes-extra;
+        name = "Tokyonight-Dark";
+        package = pkgs.tokyonight-gtk-theme;
       };
       iconTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
+        name = "Tokyonight-Dark";
+        package = pkgs.tokyonight-gtk-theme;
       };
     };
 
