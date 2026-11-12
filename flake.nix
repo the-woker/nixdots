@@ -29,9 +29,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    newp = {
-      url = "git+https://codeberg.org/woker/nix-cpp-template";
-    };
+    newp.url = "github:the-woker/newp";
 
     fibpass = {
       url = "github:the-woker/fibpass";

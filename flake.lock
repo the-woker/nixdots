@@ -231,17 +231,17 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1781324697,
-        "narHash": "sha256-lAPvVKLXtpkvB/xEG6I4wumYGaUCo/Wagk+HXpxN/p8=",
-        "ref": "refs/heads/main",
-        "rev": "b0fa18b26284f415f86fe85402c916b7953d4aa5",
-        "revCount": 15,
-        "type": "git",
-        "url": "https://codeberg.org/woker/nix-cpp-template"
+        "lastModified": 1794517434,
+        "narHash": "sha256-UrjLtjt1RrEmPH9ObAg51PFSH8iVoSdY3DErCM3WHEM=",
+        "owner": "the-woker",
+        "repo": "newp",
+        "rev": "9c60f3fb82759d335ef2f17b52b1391a9bbacd6b",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://codeberg.org/woker/nix-cpp-template"
+        "owner": "the-woker",
+        "repo": "newp",
+        "type": "github"
       }
     },
     "nix-flatpak": {
