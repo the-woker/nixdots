@@ -5,8 +5,7 @@
   config,
   settings,
   ...
-}:
-let
+}: let
   catppuccin-zen = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "zen-browser";
@@ -36,21 +35,21 @@ let
 
   zenBrowserFixed =
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
-      (oldAttrs: {
-        src = oldAttrs.src.overrideAttrs (oldSrcAttrs: {
-          outputHash = "sha256-Mj8mguc+OCR6UfvMdeVijtK7m0BNsAz5zxavMpqRb64=";
-        });
+    (oldAttrs: {
+      src = oldAttrs.src.overrideAttrs (oldSrcAttrs: {
+        outputHash = "sha256-vPfkMWDs/l8plT7SqYTnqAKKWPLsDjEU02u5BNX1zoA=";
       });
+    });
   cfg = settings.homeSettings.zen;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     home.packages = [
       (pkgs.wrapFirefox zenBrowserFixed {
         extraPrefs = lib.concatLines (
           lib.mapAttrsToList (
             name: value: "lockPref(${lib.strings.toJSON name}, ${lib.strings.toJSON value});"
-          ) prefs
+          )
+          prefs
         );
 
         extraPolicies = {
