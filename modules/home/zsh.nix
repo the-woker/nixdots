@@ -3,11 +3,9 @@
   config,
   settings,
   ...
-}:
-let
+}: let
   cfg = settings.homeSettings.zsh;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     programs.zsh = {
       enable = true;
@@ -41,6 +39,7 @@ in
         td = "tmux detach";
         ta = "tmux attach";
         py = "python";
+        headp = "bluetoothctl connect 9C:DE:F0:52:E1:0B";
       };
 
       sessionVariables = {
