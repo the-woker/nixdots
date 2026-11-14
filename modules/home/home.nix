@@ -43,6 +43,7 @@ in {
           "ghostty"
           "fastfetch"
           "mango"
+          "matuwall"
           "tmux"
           "wofi"
           "wallp"

@@ -1,10 +1,20 @@
 {
   pkgs,
   inputs,
+  config,
   ...
 }: let
   targetSystem = pkg: pkg.packages.x86_64-linux.default;
 in {
+  nixpkgs.overlays = [
+    inputs.matuwall.overlays.default
+    (final: prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        system = prev.stdenv.hostPlatform.system;
+        config.allowUnfree = config.nixpkgs.config.allowUnfree or true;
+      };
+    })
+  ];
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
@@ -97,6 +107,9 @@ in {
       masterpdfeditor4
       brightnessctl
     ]
+    ++ (with pkgs.unstable; [
+      matuwall
+    ])
     ++ map targetSystem (
       with inputs; [
         newp
