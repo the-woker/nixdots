@@ -9,6 +9,10 @@ in {
   nixpkgs.overlays = [
     inputs.matuwall.overlays.default
     (final: prev: {
+      moldStdenv = prev.stdenvAdapters.useMoldLinker prev.stdenv;
+      withMold = pkg: pkg.override {stdenv = final.moldStdenv;};
+    })
+    (final: prev: {
       unstable = import inputs.nixpkgs-unstable {
         system = prev.stdenv.hostPlatform.system;
         config.allowUnfree = config.nixpkgs.config.allowUnfree or true;

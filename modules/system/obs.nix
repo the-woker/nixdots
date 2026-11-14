@@ -4,20 +4,16 @@
   pkgs,
   settings,
   ...
-}:
-let
+}: let
   cfg = settings.systemSettings.obs;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     programs.obs-studio = {
       enable = true;
 
-      package = (
-        pkgs.obs-studio.override {
-          cudaSupport = true;
-        }
-      );
+      package = pkgs.withMold (pkgs.obs-studio.override {
+        cudaSupport = true;
+      });
 
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs

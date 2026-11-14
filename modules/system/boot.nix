@@ -4,15 +4,14 @@
   lib,
   settings,
   ...
-}:
-{
+}: {
   boot = {
-
+    tmp.useTmpfs = true;
     consoleLogLevel = 3;
-    kernelModules = [ ];
-    initrd.kernelModules = [ ];
+    kernelModules = [];
+    initrd.kernelModules = [];
 
-    initrd.availableKernelModules = [ ];
+    initrd.availableKernelModules = [];
 
     kernelParams = [
       "quiet"
@@ -43,5 +42,4 @@
       grub.enable = false;
     };
   };
-
 }

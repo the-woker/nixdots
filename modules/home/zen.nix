@@ -9,7 +9,7 @@
   catppuccin-zen = pkgs.fetchFromGitHub {
     owner = "catppuccin";
     repo = "zen-browser";
-    rev = "main";
+    rev = "c855685442c6040c4dda9c8d3ddc7b708de1cbaa";
     hash = "sha256-5A57Lyctq497SSph7B+ucuEyF1gGVTsuI3zuBItGfg4=";
   };
 
@@ -33,18 +33,12 @@
     (extension "bitwarden-password-manager" "{446900e4-71c2-419f-a6a7-df9c091e268b}")
   ];
 
-  zenBrowserFixed =
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped.overrideAttrs
-    (oldAttrs: {
-      src = oldAttrs.src.overrideAttrs (oldSrcAttrs: {
-        outputHash = "sha256-vPfkMWDs/l8plT7SqYTnqAKKWPLsDjEU02u5BNX1zoA=";
-      });
-    });
+  zenBrowser = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped;
   cfg = settings.homeSettings.zen;
 in {
   config = lib.mkIf cfg.enable {
     home.packages = [
-      (pkgs.wrapFirefox zenBrowserFixed {
+      (pkgs.wrapFirefox zenBrowser {
         extraPrefs = lib.concatLines (
           lib.mapAttrsToList (
             name: value: "lockPref(${lib.strings.toJSON name}, ${lib.strings.toJSON value});"
