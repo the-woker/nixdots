@@ -25,6 +25,8 @@ in {
   imports = files;
 
   programs.dconf.enable = true;
+  services.earlyoom.enable = true;
+  programs.ccache.enable = true;
   programs.zsh.enable = true;
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [

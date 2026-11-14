@@ -6,7 +6,6 @@
   ...
 }: {
   boot = {
-    tmp.useTmpfs = true;
     consoleLogLevel = 3;
     kernelModules = [];
     initrd.kernelModules = [];

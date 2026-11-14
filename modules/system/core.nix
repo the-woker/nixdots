@@ -1,16 +1,19 @@
 {lib, ...}: {
   nixpkgs.config.allowUnfree = true;
 
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    cores = 0;
-    max-jobs = "auto";
+  nix = {
+    optimise.automatic = true;
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      cores = 0;
+      max-jobs = 2;
+    };
+    daemonCPUSchedPolicy = "batch";
+    daemonIOSchedClass = "idle";
   };
-  nix.optimise.automatic = true;
-
   time.timeZone = "America/Vancouver";
 
   networking.hostName = lib.mkDefault "nixos";
