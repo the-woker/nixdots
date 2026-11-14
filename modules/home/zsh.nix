@@ -90,9 +90,13 @@ in {
       '';
     };
 
-    programs.starship.enable = true;
-    programs.zoxide.enable = true;
-    programs.direnv.enable = true;
-    programs.direnv.nix-direnv.enable = true;
+    programs = {
+      starship.enable = true;
+      zoxide.enable = true;
+      direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+      };
+    };
   };
 }

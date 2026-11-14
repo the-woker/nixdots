@@ -1,13 +1,8 @@
 {
-  lib,
-  config,
-  settings,
-  ...
-}:
-{
-
-  hardware.enableAllFirmware = true;
-  hardware.graphics.enable = true;
+  hardware = {
+    enableAllFirmware = true;
+    graphics.enable = true;
+  };
 
   nixpkgs.config.allowUnfree = true;
   programs.xwayland.enable = true;

@@ -18,25 +18,27 @@ in {
   ];
   config = lib.mkMerge [
     {
-      home.packages = with pkgs;
-        [
-          clang-tools
+      home = {
+        packages = with pkgs;
+          [
+            clang-tools
 
-          gcc
-          cmake
-          ninja
-          gdb
-        ]
-        ++ map targetSystem (
-          with inputs; [
-            nvim
-            fetch
+            gcc
+            cmake
+            ninja
+            gdb
           ]
-        );
-      home.enableNixpkgsReleaseCheck = false;
-      home.username = settings.name;
-      home.homeDirectory = "/home/${settings.name}";
-      home.stateVersion = "26.05";
+          ++ map targetSystem (
+            with inputs; [
+              nvim
+              fetch
+            ]
+          );
+        enableNixpkgsReleaseCheck = false;
+        username = settings.name;
+        homeDirectory = "/home/${settings.name}";
+        stateVersion = "26.05";
+      };
       xdg.configFile = let
         apps = [
           "waybar"
@@ -60,12 +62,20 @@ in {
           apps
         );
 
-      programs.home-manager.enable = true;
-      programs.ssh = {
-        enable = true;
-        enableDefaultConfig = false;
+      programs = {
+        home-manager.enable = true;
+        ssh = {
+          enable = true;
+          enableDefaultConfig = false;
+        };
+        git = {
+          enable = true;
+          settings.user = {
+            name = "woker";
+            email = settings.email;
+          };
+        };
       };
-
       xdg.desktopEntries = {
         wl-color-picker = {
           exec = "wl-color-picker";
@@ -85,9 +95,6 @@ in {
           ];
         };
       };
-      programs.git.enable = true;
-      programs.git.settings.user.name = "woker";
-      programs.git.settings.user.email = settings.email;
 
       services.mpris-proxy.enable = true;
     }

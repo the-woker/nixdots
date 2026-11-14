@@ -16,6 +16,7 @@ in {
       programs.ssh.startAgent = true;
 
       users.users.${settings.name} = {
+        hashedPasswordFile = config.sops.secrets.passwd.path;
         isNormalUser = true;
         extraGroups = ["wheel"];
 
@@ -48,17 +49,15 @@ in {
           keyFile = "/var/lib/sops-nix/key.txt";
         };
         defaultSopsFile = ../../secrets/secrets.yaml;
+        secrets = {
+          ssh-private = {
+            owner = config.users.users.${settings.name}.name;
+          };
+          passwd = {
+            neededForUsers = true;
+          };
+        };
       };
-
-      sops.secrets.ssh-private = {
-        owner = config.users.users.${settings.name}.name;
-      };
-
-      sops.secrets.passwd = {
-        neededForUsers = true;
-      };
-
-      # users.users.${settings.name}.hashedPasswordFile = config.sops.secrets.passwd.path;
     })
   ];
 }

@@ -3,11 +3,9 @@
   settings,
   lib,
   ...
-}:
-let
+}: let
   cfg = settings.systemSettings.font;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     hardware.bluetooth = {
       enable = true;
@@ -22,10 +20,12 @@ in
       };
     };
 
-    hardware.xone.enable = true;
-    hardware.xpadneo.enable = true;
+    hardware = {
+      xone.enable = true;
+      xpadneo.enable = true;
+    };
     boot = {
-      extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
+      extraModulePackages = with config.boot.kernelPackages; [xpadneo];
       extraModprobeConfig = ''
         options bluetooth disable_ertm=Y
       '';
@@ -34,8 +34,10 @@ in
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
       pulse.enable = true;
     };
 

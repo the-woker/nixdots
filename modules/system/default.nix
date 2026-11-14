@@ -24,16 +24,20 @@ in {
   _module.args.disks = ["/dev/nvme0n1"];
   imports = files;
 
-  programs.dconf.enable = true;
+  programs = {
+    dconf.enable = true;
+    ccache.enable = true;
+    zsh.enable = true;
+    nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        zlib
+        vulkan-loader
+        vulkan-headers
+        vulkan-validation-layers
+        stdenv.cc.cc.lib
+      ];
+    };
+  };
   services.earlyoom.enable = true;
-  programs.ccache.enable = true;
-  programs.zsh.enable = true;
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    zlib
-    vulkan-loader
-    vulkan-headers
-    vulkan-validation-layers
-    stdenv.cc.cc.lib
-  ];
 }

@@ -4,25 +4,25 @@
   lib,
   settings,
   ...
-}:
-let
+}: let
   cfg = settings.systemSettings.users;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
-    users.defaultUserShell = pkgs.zsh;
-    users.mutableUsers = true;
-    services.getty.autologinUser = settings.name;
-    users.users.${settings.name} = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "networkmanager"
-        "bluetooth"
-        "audio"
-        "input"
-      ];
-      packages = with pkgs; [ tree ];
+    users = {
+      defaultUserShell = pkgs.zsh;
+      mutableUsers = true;
+      users.${settings.name} = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+          "bluetooth"
+          "audio"
+          "input"
+        ];
+        packages = with pkgs; [tree];
+      };
     };
+    services.getty.autologinUser = settings.name;
   };
 }

@@ -5,8 +5,7 @@
   lib,
   config,
   ...
-}:
-let
+}: let
   nvidiaStuff = [
     "nvidia"
     "nvidia_modeset"
@@ -15,19 +14,20 @@ let
   ];
 
   cfg = settings.systemSettings.nvidia;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     boot = {
-      initrd.kernelModules = nvidiaStuff;
-      initrd.availableKernelModules = nvidiaStuff;
+      initrd = {
+        kernelModules = nvidiaStuff;
+        availableKernelModules = nvidiaStuff;
+      };
       kernelParams = [
         "nvidia-drm.modeset=1"
         "nvidia-drm.fbdev=1"
       ];
     };
 
-    services.xserver.videoDrivers = [ "nvidia" ];
+    services.xserver.videoDrivers = ["nvidia"];
 
     hardware.nvidia = {
       modesetting.enable = true;

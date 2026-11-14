@@ -8,9 +8,10 @@
   boot = {
     consoleLogLevel = 3;
     kernelModules = [];
-    initrd.kernelModules = [];
-
-    initrd.availableKernelModules = [];
+    initrd = {
+      kernelModules = [];
+      availableKernelModules = [];
+    };
 
     kernelParams = [
       "quiet"
