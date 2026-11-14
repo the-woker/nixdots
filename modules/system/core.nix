@@ -1,6 +1,10 @@
 {lib, ...}: {
   nixpkgs.config.allowUnfree = true;
 
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
   nix = {
     optimise.automatic = true;
     settings = {
@@ -8,8 +12,8 @@
         "nix-command"
         "flakes"
       ];
-      cores = 0;
-      max-jobs = 2;
+      cores = 10;
+      max-jobs = 1;
     };
     daemonCPUSchedPolicy = "batch";
     daemonIOSchedClass = "idle";
