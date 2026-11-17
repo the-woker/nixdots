@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  lib,
+  settings,
+  ...
+}: {
   nixpkgs.config.allowUnfree = true;
 
   zramSwap = {
@@ -20,7 +24,7 @@
   };
   time.timeZone = "America/Vancouver";
 
-  networking.hostName = lib.mkDefault "nixos";
+  networking.hostName = "${settings.hostname}";
 
   system.stateVersion = "26.11";
 }
