@@ -3,6 +3,7 @@
   lib,
   inputs,
   pkgs,
+  settings,
   ...
 }: let
   moldStdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
@@ -10,7 +11,7 @@
   customDwl =
     (pkgs.dwl.override {
       stdenv = moldStdenv;
-      configH = ./config.h;
+      configH = ./${settings.hostname}.h;
     }).overrideAttrs (oldAttrs: {
       patches =
         (oldAttrs.patches or [])
