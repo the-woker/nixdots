@@ -1,6 +1,8 @@
-{ config, settings, ... }:
-
 {
+  config,
+  settings,
+  ...
+}: {
   services.openssh = {
     enable = true;
 
@@ -15,4 +17,12 @@
   };
 
   services.self-deploy.sshKeyFile = config.sops.secrets.ssh-private.path;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
 }
