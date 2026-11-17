@@ -44,7 +44,6 @@ in {
           "waybar"
           "ghostty"
           "fastfetch"
-          "mango"
           "matuwall"
           "tmux"
           "wofi"
