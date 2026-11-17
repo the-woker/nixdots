@@ -1,13 +1,10 @@
 {
   config,
   lib,
-  settings,
   inputs,
   pkgs,
   ...
 }: let
-  cfg = settings.systemSettings.mango;
-
   moldStdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
 
   customDwl =
@@ -23,21 +20,28 @@
     });
 
   dwlStartup = pkgs.writeShellScript "dwl-startup" ''
-    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
+    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP=wlroots
+    systemctl --user restart xdg-desktop-portal.service xdg-desktop-portal-gtk.service
     ${pkgs.waybar}/bin/waybar &
     ${pkgs.awww}/bin/awww-daemon &
     ${pkgs.bluez}/bin/mpris-proxy &
   '';
 in {
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      customDwl
-    ];
+  environment.systemPackages = [
+    customDwl
+  ];
 
-    programs.waybar.enable = true;
-
-    environment.loginShellInit = ''
-      [ "$(tty)" = /dev/tty1 ] && exec dwl -s ${dwlStartup}
-    '';
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    config.common.default = ["gtk"];
+    config.wlroots.default = ["wlr" "gtk"];
   };
+
+  programs.waybar.enable = true;
+
+  environment.loginShellInit = ''
+    [ "$(tty)" = /dev/tty1 ] && exec dwl -s ${dwlStartup}
+  '';
 }
