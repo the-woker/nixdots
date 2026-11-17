@@ -1,16 +1,3 @@
-From 14ba1bbe5c64e58e6dc1194a8269c7e83c072195 Mon Sep 17 00:00:00 2001
-From: julmajustus <julmajustus@tutanota.com>
-Date: Mon, 21 Sep 2026 21:39:40 +0300
-Subject: [PATCH] ipc: update for v0.9
-
----
- Makefile                          |  13 +-
- config.def.h                      |   1 +
- dwl.c                             | 266 ++++++++++++++++++++++++++----
- protocols/dwl-ipc-unstable-v2.xml | 191 +++++++++++++++++++++
- 4 files changed, 437 insertions(+), 34 deletions(-)
- create mode 100644 protocols/dwl-ipc-unstable-v2.xml
-
 diff --git a/Makefile b/Makefile
 index 8304245..b71571f 100644
 --- a/Makefile
@@ -47,10 +34,42 @@ index 8304245..b71571f 100644
  dist: clean
  	mkdir -p dwl-$(VERSION)
 diff --git a/config.def.h b/config.def.h
-index 13c5322..998c715 100644
+index 13c5322..afaf9c5 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -123,6 +123,7 @@ static const Key keys[] = {
+@@ -21,6 +21,12 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
+ /* logging */
+ static int log_level = WLR_ERROR;
+ 
++/* Autostart */
++static const char *const autostart[] = {
++	"EXAMPLE_binary", "argument1", NULL,
++	NULL /* terminate */
++};
++
+ static const Rule rules[] = {
+ 	/* app_id             title       tags mask     isfloating   monitor */
+ 	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
+@@ -41,10 +47,14 @@ static const Layout layouts[] = {
+  * WARNING: negative values other than (-1, -1) cause problems with Xwayland clients due to
+  * https://gitlab.freedesktop.org/xorg/xserver/-/issues/899 */
+ static const MonitorRule monrules[] = {
+-   /* name        mfact  nmaster scale layout       rotate/reflect                x    y
+-    * example of a HiDPI laptop monitor:
+-    { "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 }, */
+-	{ NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
++	/* name       mfact nmaster scale layout       rotate/reflect              x  y  resx resy rate mode adaptive*/
++	/* example of a HiDPI laptop monitor at 120Hz: { "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 120.000f, 1, 1}, */
++	/*
++	* mode let's the user decide on how dwl should implement the modes:
++	* -1 Sets a custom mode following the users choice
++	* All other number's set the mode at the index n, 0 is the standard mode; see wlr-randr
++	*/
++	{ NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, -1, -1, 0, 0, 0.0f, 0 ,1},
+ 	/* default monitor rule: can be changed but cannot be eliminated; at least one monitor rule must exist */
+ };
+ 
+@@ -123,6 +133,7 @@ static const Key keys[] = {
  	/* modifier                  key                  function          argument */
  	{ MODKEY,                    XKB_KEY_p,           spawn,            {.v = menucmd} },
  	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,      spawn,            {.v = termcmd} },
@@ -59,7 +78,7 @@ index 13c5322..998c715 100644
  	{ MODKEY,                    XKB_KEY_k,           focusstack,       {.i = -1} },
  	{ MODKEY,                    XKB_KEY_i,           incnmaster,       {.i = +1} },
 diff --git a/dwl.c b/dwl.c
-index 4cfd0fd..d24fcb3 100644
+index 4cfd0fd..e3e43d7 100644
 --- a/dwl.c
 +++ b/dwl.c
 @@ -76,6 +76,7 @@
@@ -91,7 +110,27 @@ index 4cfd0fd..d24fcb3 100644
  	struct wlr_output *wlr_output;
  	struct wlr_scene_output *scene_output;
  	struct wlr_scene_rect *fullscreen_bg; /* See createmon() for info */
-@@ -303,6 +311,17 @@ static void destroypointerconstraint(struct wl_listener *listener, void *data);
+@@ -235,6 +243,11 @@ typedef struct {
+ 	const Layout *lt;
+ 	enum wl_output_transform rr;
+ 	int x, y;
++	int resx;
++	int resy;
++	float rate;
++	int mode;
++	int adaptive;
+ } MonitorRule;
+ 
+ typedef struct {
+@@ -266,6 +279,7 @@ static void arrange(Monitor *m);
+ static void arrangelayer(Monitor *m, struct wl_list *list,
+ 		struct wlr_box *usable_area, int exclusive);
+ static void arrangelayers(Monitor *m);
++static void autostartexec(void);
+ static void axisnotify(struct wl_listener *listener, void *data);
+ static void buttonpress(struct wl_listener *listener, void *data);
+ static void capturerequest(struct wl_listener *listener, void *data);
+@@ -303,6 +317,17 @@ static void destroypointerconstraint(struct wl_listener *listener, void *data);
  static void destroysessionlock(struct wl_listener *listener, void *data);
  static void destroykeyboardgroup(struct wl_listener *listener, void *data);
  static Monitor *dirtomon(enum wlr_direction dir);
@@ -109,7 +148,7 @@ index 4cfd0fd..d24fcb3 100644
  static void focusclient(Client *c, int lift);
  static void focusmon(const Arg *arg);
  static void focusstack(const Arg *arg);
-@@ -355,6 +374,7 @@ static void startdrag(struct wl_listener *listener, void *data);
+@@ -355,6 +380,7 @@ static void startdrag(struct wl_listener *listener, void *data);
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
  static void tile(Monitor *m);
@@ -117,7 +156,7 @@ index 4cfd0fd..d24fcb3 100644
  static void togglefloating(const Arg *arg);
  static void togglefullscreen(const Arg *arg);
  static void toggletag(const Arg *arg);
-@@ -462,6 +482,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
+@@ -462,6 +488,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
  static struct wl_listener new_session_lock = {.notify = locksession};
  static struct wl_listener new_foreign_toplevel_capture_request = {.notify = capturerequest};
  
@@ -127,7 +166,69 @@ index 4cfd0fd..d24fcb3 100644
  #ifdef XWAYLAND
  static void activatex11(struct wl_listener *listener, void *data);
  static void associatex11(struct wl_listener *listener, void *data);
-@@ -823,6 +846,10 @@ cleanupmon(struct wl_listener *listener, void *data)
+@@ -476,6 +505,9 @@ static struct wl_listener xwayland_ready = {.notify = xwaylandready};
+ static struct wlr_xwayland *xwayland;
+ #endif
+ 
++static pid_t *autostart_pids;
++static size_t autostart_len;
++
+ /* configuration, allows nested code to access above variables */
+ #include "config.h"
+ 
+@@ -650,6 +682,27 @@ arrangelayers(Monitor *m)
+ 	}
+ }
+ 
++void
++autostartexec(void) {
++	const char *const *p;
++	size_t i = 0;
++
++	/* count entries */
++	for (p = autostart; *p; autostart_len++, p++)
++		while (*++p);
++
++	autostart_pids = calloc(autostart_len, sizeof(pid_t));
++	for (p = autostart; *p; i++, p++) {
++		if ((autostart_pids[i] = fork()) == 0) {
++			setsid();
++			execvp(*p, (char *const *)p);
++			die("dwl: execvp %s:", *p);
++		}
++		/* skip arguments */
++		while (*++p);
++	}
++}
++
+ void
+ axisnotify(struct wl_listener *listener, void *data)
+ {
+@@ -789,12 +842,23 @@ checkidleinhibitor(struct wlr_surface *exclude)
+ void
+ cleanup(void)
+ {
++	size_t i;
++	char **name;
+ 	cleanuplisteners();
+ #ifdef XWAYLAND
+ 	wlr_xwayland_destroy(xwayland);
+ 	xwayland = NULL;
+ #endif
+ 	wl_display_destroy_clients(dpy);
++
++	/* kill child processes */
++	for (i = 0; i < autostart_len; i++) {
++		if (0 < autostart_pids[i]) {
++			kill(autostart_pids[i], SIGTERM);
++			waitpid(autostart_pids[i], NULL, 0);
++		}
++	}
++
+ 	if (child_pid > 0) {
+ 		kill(-child_pid, SIGTERM);
+ 		waitpid(child_pid, NULL, 0);
+@@ -823,6 +887,10 @@ cleanupmon(struct wl_listener *listener, void *data)
  	LayerSurface *l, *tmp;
  	size_t i;
  
@@ -138,7 +239,15 @@ index 4cfd0fd..d24fcb3 100644
  	/* m->layers[i] are intentionally not unlinked */
  	for (i = 0; i < LENGTH(m->layers); i++) {
  		wl_list_for_each_safe(l, tmp, &m->layers[i], link)
-@@ -1150,6 +1177,8 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1139,6 +1207,7 @@ createmon(struct wl_listener *listener, void *data)
+ 	/* This event is raised by the backend when a new output (aka a display or
+ 	 * monitor) becomes available. */
+ 	struct wlr_output *wlr_output = data;
++	struct wlr_output_mode *mode = wl_container_of(wlr_output->modes.next, mode, link);
+ 	const MonitorRule *r;
+ 	size_t i;
+ 	struct wlr_output_state state;
+@@ -1150,6 +1219,8 @@ createmon(struct wl_listener *listener, void *data)
  	m = wlr_output->data = ecalloc(1, sizeof(*m));
  	m->wlr_output = wlr_output;
  
@@ -147,7 +256,37 @@ index 4cfd0fd..d24fcb3 100644
  	for (i = 0; i < LENGTH(m->layers); i++)
  		wl_list_init(&m->layers[i]);
  
-@@ -1504,6 +1533,199 @@ dirtomon(enum wlr_direction dir)
+@@ -1167,16 +1238,23 @@ createmon(struct wl_listener *listener, void *data)
+ 			strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, LENGTH(m->ltsymbol));
+ 			wlr_output_state_set_scale(&state, r->scale);
+ 			wlr_output_state_set_transform(&state, r->rr);
++
++			wlr_output_state_set_adaptive_sync_enabled(&state, r->adaptive);
++
++			if(r->mode == -1)
++				wlr_output_state_set_custom_mode(&state, r->resx, r->resy,
++				(int) (r->rate > 0 ? r->rate * 1000 : 0));
++			else if (!wl_list_empty(&wlr_output->modes)) {
++				for (int j = 0; j < r->mode; j++) {
++					mode = wl_container_of(mode->link.next, mode, link);
++				}
++				wlr_output_state_set_mode(&state, mode);
++			}
++
+ 			break;
+ 		}
+ 	}
+ 
+-	/* The mode is a tuple of (width, height, refresh rate), and each
+-	 * monitor supports only a specific set of modes. We just pick the
+-	 * monitor's preferred mode; a more sophisticated compositor would let
+-	 * the user configure it. */
+-	wlr_output_state_set_mode(&state, wlr_output_preferred_mode(wlr_output));
+-
+ 	/* Set up event listeners */
+ 	LISTEN(&wlr_output->events.frame, &m->frame, rendermon);
+ 	LISTEN(&wlr_output->events.destroy, &m->destroy, cleanupmon);
+@@ -1504,6 +1582,199 @@ dirtomon(enum wlr_direction dir)
  	return selmon;
  }
  
@@ -347,7 +486,36 @@ index 4cfd0fd..d24fcb3 100644
  void
  focusclient(Client *c, int lift)
  {
-@@ -2257,38 +2479,9 @@ void
+@@ -1673,10 +1944,25 @@ gpureset(struct wl_listener *listener, void *data)
+ void
+ handlesig(int signo)
+ {
+-	if (signo == SIGCHLD)
+-		while (waitpid(-1, NULL, WNOHANG) > 0);
+-	else if (signo == SIGINT || signo == SIGTERM)
++	if (signo == SIGCHLD) {
++		pid_t pid, *p, *lim;
++		while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
++			if (pid == child_pid)
++				child_pid = -1;
++			if (!(p = autostart_pids))
++				continue;
++			lim = &p[autostart_len];
++
++			for (; p < lim; p++) {
++				if (*p == pid) {
++					*p = -1;
++					break;
++				}
++			}
++		}
++	} else if (signo == SIGINT || signo == SIGTERM) {
+ 		quit(NULL);
++	}
+ }
+ 
+ void
+@@ -2257,38 +2543,9 @@ void
  printstatus(void)
  {
  	Monitor *m = NULL;
@@ -388,7 +556,15 @@ index 4cfd0fd..d24fcb3 100644
  }
  
  void
-@@ -2816,6 +3009,10 @@ setup(void)
+@@ -2407,6 +2664,7 @@ run(char *startup_cmd)
+ 		die("startup: backend_start");
+ 
+ 	/* Now that the socket exists and the backend is started, run the startup command */
++	autostartexec();
+ 	if (startup_cmd) {
+ 		int piperw[2];
+ 		if (pipe(piperw) < 0)
+@@ -2816,6 +3074,10 @@ setup(void)
  	text_input_manager = wlr_text_input_manager_v3_create(dpy);
  	input_method_relay = input_method_relay_create();
  
@@ -399,7 +575,7 @@ index 4cfd0fd..d24fcb3 100644
  	/* Make sure XWayland clients don't connect to the parent X server,
  	 * e.g when running in the x11 backend or the wayland backend and the
  	 * compositor has Xwayland support */
-@@ -2913,6 +3110,13 @@ tile(Monitor *m)
+@@ -2913,6 +3175,13 @@ tile(Monitor *m)
  	}
  }
  
@@ -610,7 +786,3 @@ index 0000000..07cc1c2
 +    </event>
 +  </interface>
 +</protocol>
--- 
-2.55.0
-
-
