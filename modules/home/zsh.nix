@@ -53,12 +53,19 @@ in {
         BAT_THEME = "base16";
         TZDIR = "/etc/zoneinfo";
       };
-
-      initContent = ''
-        bindkey -s '^T' 'tmux\n'
-
-
-        function udots() {
+      siteFunctions = {
+        dwu = ''
+          local dir
+          dir=$(pwd)
+          cd ~/dwl || return 1
+          git add .
+          git commit -m "Update config.def.h"
+          git push
+          cd ~/nixdots
+          nix flake update
+          sudo nixos-rebuild switch --flake ~/nixdots#${settings.hostname}
+        '';
+        udots = ''
           cd ~/configs || return 1
           git add .
           local files
@@ -67,19 +74,19 @@ in {
           git commit -m "$msg"
           git push
           nix flake update configs --flake ~/nixdots
-          home-manager switch --flake ~/nixdots
-        }
-
-        function y() {
+          home-manager switch --flake ~/nixdots#${settings.name}@${settings.hostname}
+        '';
+        y = ''
           local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
           command yazi "$@" --cwd-file="$tmp"
           IFS= read -r  cwd < "$tmp"
-              [ "''${cwd}" != "''${PWD}" ] && [ "''${cwd}" ] && builtin cd -- "''${cwd}"
-            rm -f -- "$tmp"
-        }
+            [ "''${cwd}" != "''${PWD}" ] && [ "''${cwd}" ] && builtin cd -- "''${cwd}"
+          rm -f -- "$tmp"
+        '';
+      };
 
-
-
+      initContent = ''
+        bindkey -s '^T' 'tmux\n'
         bindkey -s '^E' 'y\n'
 
         eval "$(starship init zsh)"

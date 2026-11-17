@@ -110,6 +110,7 @@ in {
       wl-clip-persist
       masterpdfeditor4
       brightnessctl
+      smem
     ]
     ++ (with pkgs.unstable; [
       matuwall

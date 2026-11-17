@@ -22,7 +22,7 @@ with lib; let
   files = map (file: ./${file}) (importAll ./.);
 in {
   _module.args.disks = ["/dev/nvme0n1"];
-  imports = files;
+  imports = files ++ [./dwl];
 
   programs = {
     dconf.enable = true;
