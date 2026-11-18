@@ -13,7 +13,7 @@ static const float bordercolor[]           = COLOR(0x444444ff);
 static const float focuscolor[]            = COLOR(0x005577ff);
 static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
-static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You can also use glsl colors */
+static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 0.0f}; /* You can also use glsl colors */
 
 /* tagging - TAGCOUNT must be no greater than 31 */
 #define TAGCOUNT (9)
@@ -165,11 +165,11 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_Tab,                      view,             {0} },
 	{ MODKEY,                    XKB_KEY_q,                        killclient,       {0} },
 	{ MODKEY,                    XKB_KEY_t,                        setlayout,        {.v = &layouts[0]} },
-	{ MODKEY,                    XKB_KEY_f,                        setlayout,        {.v = &layouts[1]} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_f,                        setlayout,        {.v = &layouts[1]} },
 	{ MODKEY,                    XKB_KEY_m,                        setlayout,        {.v = &layouts[2]} },
 	{ MODKEY,                    XKB_KEY_n,                        setlayout,        {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_n,                        togglefloating,   {0} },
-	{ MODKEY,                    XKB_KEY_e,                        togglefullscreen, {0} },
+	{ MODKEY,                    XKB_KEY_f,                        togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,                        view,             {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_0,                        tag,              {.ui = ~0} },
 	{ MODKEY,                    XKB_KEY_comma,                    focusmon,         {.i = WLR_DIRECTION_LEFT} },
