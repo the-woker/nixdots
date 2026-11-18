@@ -32,7 +32,7 @@
         enable = true;
         efiSupport = true;
         resolution = "1920x1080x32";
-        extraConfig = lib.mkIf settings.systemSettings.windows.enable ''
+        extraEntries = lib.mkIf settings.systemSettings.windows.enable ''
           /Windows 11
               protocol: efi
               path: uuid(3e00b069-3e86-4856-bd70-89f3244c14d4):/EFI/Microsoft/Boot/bootmgfw.efi
