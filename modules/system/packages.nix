@@ -111,6 +111,7 @@ in {
       masterpdfeditor4
       brightnessctl
       smem
+      gnumake
     ]
     ++ (with pkgs.unstable; [
       matuwall

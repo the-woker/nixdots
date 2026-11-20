@@ -67,7 +67,8 @@
       build)
         cd "$WORK_DIR/source"
         cp "$CONFIG_H" config.h
-        ${pkgs.bash}/bin/bash -c 'eval "$(nix print-dev-env "'"$HOME"'/nixdots#nixosConfigurations.'"$HOST"'.pkgs.dwl)"; buildPhase'
+        eval "$(nix print-dev-env "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl")"
+        buildPhase
         echo "Build succeeded against $HOST.h! Run 'dwl-patch save' to export combined.patch."
         ;;
 

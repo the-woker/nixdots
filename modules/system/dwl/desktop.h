@@ -164,6 +164,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_f,                        togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,                        view,             {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_0,                        tag,              {.ui = ~0} },
+	{ MODKEY,                    XKB_KEY_o,          winview,        {0} },
 	{ MODKEY,                    XKB_KEY_comma,                    focusmon,         {.i = WLR_DIRECTION_LEFT} },
 	{ MODKEY,                    XKB_KEY_period,                   focusmon,         {.i = WLR_DIRECTION_RIGHT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_comma,                    tagmon,           {.i = WLR_DIRECTION_LEFT} },

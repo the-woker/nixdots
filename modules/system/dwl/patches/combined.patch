@@ -34,7 +34,7 @@ index 8304245..b71571f 100644
  dist: clean
  	mkdir -p dwl-$(VERSION)
 diff --git a/config.def.h b/config.def.h
-index 13c5322..afaf9c5 100644
+index 13c5322..b34896a 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -21,6 +21,12 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
@@ -77,8 +77,16 @@ index 13c5322..afaf9c5 100644
  	{ MODKEY,                    XKB_KEY_j,           focusstack,       {.i = +1} },
  	{ MODKEY,                    XKB_KEY_k,           focusstack,       {.i = -1} },
  	{ MODKEY,                    XKB_KEY_i,           incnmaster,       {.i = +1} },
+@@ -139,6 +150,7 @@ static const Key keys[] = {
+ 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,       togglefloating,   {0} },
+ 	{ MODKEY,                    XKB_KEY_e,           togglefullscreen, {0} },
+ 	{ MODKEY,                    XKB_KEY_0,           view,             {.ui = ~0} },
++	{ MODKEY,                    XKB_KEY_o,           winview,          {0} },
+ 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_0,           tag,              {.ui = ~0} },
+ 	{ MODKEY,                    XKB_KEY_comma,       focusmon,         {.i = WLR_DIRECTION_LEFT} },
+ 	{ MODKEY,                    XKB_KEY_period,      focusmon,         {.i = WLR_DIRECTION_RIGHT} },
 diff --git a/dwl.c b/dwl.c
-index 4cfd0fd..e3e43d7 100644
+index 4cfd0fd..2372f0a 100644
 --- a/dwl.c
 +++ b/dwl.c
 @@ -76,6 +76,7 @@
@@ -156,7 +164,15 @@ index 4cfd0fd..e3e43d7 100644
  static void togglefloating(const Arg *arg);
  static void togglefullscreen(const Arg *arg);
  static void toggletag(const Arg *arg);
-@@ -462,6 +488,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
+@@ -368,6 +394,7 @@ static void urgent(struct wl_listener *listener, void *data);
+ static void view(const Arg *arg);
+ static void virtualkeyboard(struct wl_listener *listener, void *data);
+ static void virtualpointer(struct wl_listener *listener, void *data);
++static void winview(const Arg *a);
+ static Monitor *xytomon(double x, double y);
+ static void xytonode(double x, double y, struct wlr_surface **psurface,
+ 		Client **pc, LayerSurface **pl, double *nx, double *ny);
+@@ -462,6 +489,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
  static struct wl_listener new_session_lock = {.notify = locksession};
  static struct wl_listener new_foreign_toplevel_capture_request = {.notify = capturerequest};
  
@@ -166,7 +182,7 @@ index 4cfd0fd..e3e43d7 100644
  #ifdef XWAYLAND
  static void activatex11(struct wl_listener *listener, void *data);
  static void associatex11(struct wl_listener *listener, void *data);
-@@ -476,6 +505,9 @@ static struct wl_listener xwayland_ready = {.notify = xwaylandready};
+@@ -476,6 +506,9 @@ static struct wl_listener xwayland_ready = {.notify = xwaylandready};
  static struct wlr_xwayland *xwayland;
  #endif
  
@@ -176,7 +192,7 @@ index 4cfd0fd..e3e43d7 100644
  /* configuration, allows nested code to access above variables */
  #include "config.h"
  
-@@ -650,6 +682,27 @@ arrangelayers(Monitor *m)
+@@ -650,6 +683,27 @@ arrangelayers(Monitor *m)
  	}
  }
  
@@ -204,7 +220,7 @@ index 4cfd0fd..e3e43d7 100644
  void
  axisnotify(struct wl_listener *listener, void *data)
  {
-@@ -789,12 +842,23 @@ checkidleinhibitor(struct wlr_surface *exclude)
+@@ -789,12 +843,23 @@ checkidleinhibitor(struct wlr_surface *exclude)
  void
  cleanup(void)
  {
@@ -228,7 +244,7 @@ index 4cfd0fd..e3e43d7 100644
  	if (child_pid > 0) {
  		kill(-child_pid, SIGTERM);
  		waitpid(child_pid, NULL, 0);
-@@ -823,6 +887,10 @@ cleanupmon(struct wl_listener *listener, void *data)
+@@ -823,6 +888,10 @@ cleanupmon(struct wl_listener *listener, void *data)
  	LayerSurface *l, *tmp;
  	size_t i;
  
@@ -239,7 +255,7 @@ index 4cfd0fd..e3e43d7 100644
  	/* m->layers[i] are intentionally not unlinked */
  	for (i = 0; i < LENGTH(m->layers); i++) {
  		wl_list_for_each_safe(l, tmp, &m->layers[i], link)
-@@ -1139,6 +1207,7 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1139,6 +1208,7 @@ createmon(struct wl_listener *listener, void *data)
  	/* This event is raised by the backend when a new output (aka a display or
  	 * monitor) becomes available. */
  	struct wlr_output *wlr_output = data;
@@ -247,7 +263,7 @@ index 4cfd0fd..e3e43d7 100644
  	const MonitorRule *r;
  	size_t i;
  	struct wlr_output_state state;
-@@ -1150,6 +1219,8 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1150,6 +1220,8 @@ createmon(struct wl_listener *listener, void *data)
  	m = wlr_output->data = ecalloc(1, sizeof(*m));
  	m->wlr_output = wlr_output;
  
@@ -256,7 +272,7 @@ index 4cfd0fd..e3e43d7 100644
  	for (i = 0; i < LENGTH(m->layers); i++)
  		wl_list_init(&m->layers[i]);
  
-@@ -1167,16 +1238,23 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1167,16 +1239,23 @@ createmon(struct wl_listener *listener, void *data)
  			strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, LENGTH(m->ltsymbol));
  			wlr_output_state_set_scale(&state, r->scale);
  			wlr_output_state_set_transform(&state, r->rr);
@@ -286,7 +302,7 @@ index 4cfd0fd..e3e43d7 100644
  	/* Set up event listeners */
  	LISTEN(&wlr_output->events.frame, &m->frame, rendermon);
  	LISTEN(&wlr_output->events.destroy, &m->destroy, cleanupmon);
-@@ -1504,6 +1582,199 @@ dirtomon(enum wlr_direction dir)
+@@ -1504,6 +1583,199 @@ dirtomon(enum wlr_direction dir)
  	return selmon;
  }
  
@@ -486,7 +502,7 @@ index 4cfd0fd..e3e43d7 100644
  void
  focusclient(Client *c, int lift)
  {
-@@ -1673,10 +1944,25 @@ gpureset(struct wl_listener *listener, void *data)
+@@ -1673,10 +1945,25 @@ gpureset(struct wl_listener *listener, void *data)
  void
  handlesig(int signo)
  {
@@ -515,7 +531,7 @@ index 4cfd0fd..e3e43d7 100644
  }
  
  void
-@@ -2257,38 +2543,9 @@ void
+@@ -2257,38 +2544,9 @@ void
  printstatus(void)
  {
  	Monitor *m = NULL;
@@ -556,7 +572,7 @@ index 4cfd0fd..e3e43d7 100644
  }
  
  void
-@@ -2407,6 +2664,7 @@ run(char *startup_cmd)
+@@ -2407,6 +2665,7 @@ run(char *startup_cmd)
  		die("startup: backend_start");
  
  	/* Now that the socket exists and the backend is started, run the startup command */
@@ -564,7 +580,7 @@ index 4cfd0fd..e3e43d7 100644
  	if (startup_cmd) {
  		int piperw[2];
  		if (pipe(piperw) < 0)
-@@ -2816,6 +3074,10 @@ setup(void)
+@@ -2816,6 +3075,10 @@ setup(void)
  	text_input_manager = wlr_text_input_manager_v3_create(dpy);
  	input_method_relay = input_method_relay_create();
  
@@ -575,7 +591,7 @@ index 4cfd0fd..e3e43d7 100644
  	/* Make sure XWayland clients don't connect to the parent X server,
  	 * e.g when running in the x11 backend or the wayland backend and the
  	 * compositor has Xwayland support */
-@@ -2913,6 +3175,13 @@ tile(Monitor *m)
+@@ -2913,6 +3176,13 @@ tile(Monitor *m)
  	}
  }
  
@@ -588,6 +604,24 @@ index 4cfd0fd..e3e43d7 100644
 +
  void
  togglefloating(const Arg *arg)
+ {
+@@ -3206,6 +3476,17 @@ virtualpointer(struct wl_listener *listener, void *data)
+ 	wlr_seat_set_capabilities(seat, seat->capabilities | WL_SEAT_CAPABILITY_POINTER);
+ }
+ 
++void
++winview(const Arg *a) {
++	Arg b = {0};
++	Client *sel = focustop(selmon);
++	if(!sel)
++		return;
++	b.ui = sel -> tags;
++	view(&b);
++	return;
++}
++
+ Monitor *
+ xytomon(double x, double y)
  {
 diff --git a/protocols/dwl-ipc-unstable-v2.xml b/protocols/dwl-ipc-unstable-v2.xml
 new file mode 100644

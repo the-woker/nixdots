@@ -134,9 +134,9 @@ static const char *mutemic[]    = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@
 static const char *brightup[]   = { "brightnessctl", "s", "5%+", NULL};
 static const char *brightdown[] = { "brightnessctl", "s", "5%-", NULL};
 
-static const char *prev[]      = { "playerctl", "previous", NULL};
+static const char *play_prev[]      = { "playerctl", "previous", NULL};
 static const char *play_pause[]      = { "playerctl", "play-pause", NULL};
-static const char *next[]      = { "playerctl", "next", NULL};
+static const char *play_next[]      = { "playerctl", "next", NULL};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
@@ -147,9 +147,9 @@ static const Key keys[] = {
 	{ 0,                         XKB_KEY_XF86AudioMicMute,         spawn,            {.v = mutemic} },
 	{ 0,						 XKB_KEY_XF86MonBrightnessUp,      spawn,            {.v = brightup}},
 	{ 0,						 XKB_KEY_XF86MonBrightnessDown,    spawn,            {.v = brightdown}},
-	{ 0,                         XKB_KEY_F9,                       spawn,            {.v = prev} },
+	{ 0,                         XKB_KEY_F9,                       spawn,            {.v = play_prev} },
 	{ 0,                         XKB_KEY_F10,                      spawn,            {.v = play_pause} },
-	{ 0,                         XKB_KEY_F11,                      spawn,            {.v = next} },
+	{ 0,                         XKB_KEY_F11,                      spawn,            {.v = play_next} },
 	{ 0,						 XKB_KEY_XF86AudioPlay,			   spawn,            {.v = play_pause}},
 	{ MODKEY,                    XKB_KEY_space,                    spawn,            {.v = menucmd} },
 	{ MODKEY,                    XKB_KEY_w,                        spawn,            {.v = wallcmd} },
@@ -172,6 +172,7 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_f,                        togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,                        view,             {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_0,                        tag,              {.ui = ~0} },
+	{ MODKEY,                    XKB_KEY_o,          winview,        {0} },
 	{ MODKEY,                    XKB_KEY_comma,                    focusmon,         {.i = WLR_DIRECTION_LEFT} },
 	{ MODKEY,                    XKB_KEY_period,                   focusmon,         {.i = WLR_DIRECTION_RIGHT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_comma,                    tagmon,           {.i = WLR_DIRECTION_LEFT} },
