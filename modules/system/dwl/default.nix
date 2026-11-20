@@ -6,20 +6,6 @@
   settings,
   ...
 }: let
-  moldStdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
-
-  customDwl =
-    (pkgs.dwl.override {
-      stdenv = moldStdenv;
-      configH = ./${settings.hostname}.h;
-    }).overrideAttrs (oldAttrs: {
-      patches =
-        (oldAttrs.patches or [])
-        ++ [
-          ./patches/combined.patch
-        ];
-    });
-
   dwlPatch = pkgs.writeShellScriptBin "dwl-patch" ''
     set -euo pipefail
 
@@ -78,8 +64,8 @@
         ${pkgs.git}/bin/git add -A
         BASE_COMMIT=$(${pkgs.git}/bin/git rev-list --max-parents=0 HEAD)
         ${pkgs.git}/bin/git diff "$BASE_COMMIT" > "$COMBINED_PATCH"
-        ${pkgs.git}/bin/git -C "$HOME/nixdots" add "$COMBINED_PATCH" "$CONFIG_H"
-        echo "Saved $COMBINED_PATCH and staged $HOST.h"
+        ${pkgs.git}/bin/git -C "$HOME/nixdots" add "$COMBINED_PATCH" "$DWL_DIR/desktop.h" "$DWL_DIR/thinkpad.h"
+        echo "Saved $COMBINED_PATCH and staged desktop.h and thinkpad.h"
         ;;
 
       *)
@@ -97,8 +83,30 @@
     ${pkgs.bluez}/bin/mpris-proxy &
   '';
 in {
+  nixpkgs.overlays = [
+    (final: prev: {
+      dwl =
+        (prev.dwl.override {
+          stdenv = prev.stdenvAdapters.useMoldLinker prev.stdenv;
+          configH = ./${settings.hostname}.h;
+        }).overrideAttrs (oldAttrs: {
+          buildInputs =
+            (oldAttrs.buildInputs or [])
+            ++ [
+              final.unstable.scenefx
+              final.libGL
+            ];
+          patches =
+            (oldAttrs.patches or [])
+            ++ [
+              ./patches/combined.patch
+            ];
+        });
+    })
+  ];
+
   environment.systemPackages = [
-    customDwl
+    pkgs.dwl
     dwlPatch
   ];
 

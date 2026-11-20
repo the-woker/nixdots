@@ -21,6 +21,10 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 0.0f}; /* You ca
 /* logging */
 static int log_level = WLR_ERROR;
 
+static int blur_enabled = 1;
+#define blur_params 2, 2, 0, 0.703125, 0.4375, 0.875 // passes, radius, noise, brightness, contrast, saturation
+
+
 /* Autostart */
 static const char *const autostart[] = {
 	"waybar", NULL,
@@ -155,6 +159,8 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_w,                        spawn,            {.v = wallcmd} },
 	{ MODKEY,                    XKB_KEY_Return,                   spawn,            {.v = termcmd} },
 	{ MODKEY,                    XKB_KEY_b,                        spawn,            {.v = browsercmd} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,           toggleblur,       {0} },
+    { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_b,           toggleblurfocused,{0} },
 	{ MODKEY,                    XKB_KEY_j,                        focusstack,       {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,                        focusstack,       {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,                        incnmaster,       {.i = +1} },

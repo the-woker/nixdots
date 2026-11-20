@@ -1,7 +1,16 @@
 diff --git a/Makefile b/Makefile
-index 8304245..b71571f 100644
+index 8304245..10be215 100644
 --- a/Makefile
 +++ b/Makefile
+@@ -12,7 +12,7 @@ DWLDEVCFLAGS = -g -Wpedantic -Wall -Wextra -Wdeclaration-after-statement \
+ 	-Wfloat-conversion
+ 
+ # CFLAGS / LDFLAGS
+-PKGS      = wayland-server xkbcommon libinput $(XLIBS)
++PKGS      = scenefx-0.5 wayland-server xkbcommon libinput $(XLIBS)
+ DWLCFLAGS = `$(PKG_CONFIG) --cflags $(PKGS)` $(WLR_INCS) $(DWLCPPFLAGS) $(DWLDEVCFLAGS) $(CFLAGS)
+ LDLIBS    = `$(PKG_CONFIG) --libs $(PKGS)` $(WLR_LIBS) -lm $(LIBS)
+ 
 @@ -20,8 +20,9 @@ all: dwl
  dwl: dwl.c client.h config.h ime.h util.h config.mk cursor-shape-v1-protocol.h \
  	ext-image-copy-capture-v1-protocol.h \
@@ -34,10 +43,16 @@ index 8304245..b71571f 100644
  dist: clean
  	mkdir -p dwl-$(VERSION)
 diff --git a/config.def.h b/config.def.h
-index 13c5322..b34896a 100644
+index 13c5322..f19094e 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -21,6 +21,12 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
+@@ -18,9 +18,18 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
+ /* tagging - TAGCOUNT must be no greater than 31 */
+ #define TAGCOUNT (9)
+ 
++#define blur_params 2, 2, 0, 0.703125, 0.4375, 0.875 // passes, radius, noise, brightness, contrast, saturation
++static int blur_enabled = 1;
++
  /* logging */
  static int log_level = WLR_ERROR;
  
@@ -50,7 +65,7 @@ index 13c5322..b34896a 100644
  static const Rule rules[] = {
  	/* app_id             title       tags mask     isfloating   monitor */
  	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
-@@ -41,10 +47,14 @@ static const Layout layouts[] = {
+@@ -41,10 +50,14 @@ static const Layout layouts[] = {
   * WARNING: negative values other than (-1, -1) cause problems with Xwayland clients due to
   * https://gitlab.freedesktop.org/xorg/xserver/-/issues/899 */
  static const MonitorRule monrules[] = {
@@ -69,7 +84,7 @@ index 13c5322..b34896a 100644
  	/* default monitor rule: can be changed but cannot be eliminated; at least one monitor rule must exist */
  };
  
-@@ -123,6 +133,7 @@ static const Key keys[] = {
+@@ -123,12 +136,15 @@ static const Key keys[] = {
  	/* modifier                  key                  function          argument */
  	{ MODKEY,                    XKB_KEY_p,           spawn,            {.v = menucmd} },
  	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,      spawn,            {.v = termcmd} },
@@ -77,7 +92,15 @@ index 13c5322..b34896a 100644
  	{ MODKEY,                    XKB_KEY_j,           focusstack,       {.i = +1} },
  	{ MODKEY,                    XKB_KEY_k,           focusstack,       {.i = -1} },
  	{ MODKEY,                    XKB_KEY_i,           incnmaster,       {.i = +1} },
-@@ -139,6 +150,7 @@ static const Key keys[] = {
+ 	{ MODKEY,                    XKB_KEY_d,           incnmaster,       {.i = -1} },
+ 	{ MODKEY,                    XKB_KEY_h,           setmfact,         {.f = -0.05f} },
+ 	{ MODKEY,                    XKB_KEY_l,           setmfact,         {.f = +0.05f} },
++	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,           toggleblur,       {0} },
++	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_b,           toggleblurfocused,{0} },
+ 	{ MODKEY,                    XKB_KEY_Return,      zoom,             {0} },
+ 	{ MODKEY,                    XKB_KEY_Tab,         view,             {0} },
+ 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_c,           killclient,       {0} },
+@@ -139,6 +155,7 @@ static const Key keys[] = {
  	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,       togglefloating,   {0} },
  	{ MODKEY,                    XKB_KEY_e,           togglefullscreen, {0} },
  	{ MODKEY,                    XKB_KEY_0,           view,             {.ui = ~0} },
@@ -86,10 +109,27 @@ index 13c5322..b34896a 100644
  	{ MODKEY,                    XKB_KEY_comma,       focusmon,         {.i = WLR_DIRECTION_LEFT} },
  	{ MODKEY,                    XKB_KEY_period,      focusmon,         {.i = WLR_DIRECTION_RIGHT} },
 diff --git a/dwl.c b/dwl.c
-index 4cfd0fd..2372f0a 100644
+index 4cfd0fd..433a27b 100644
 --- a/dwl.c
 +++ b/dwl.c
-@@ -76,6 +76,7 @@
+@@ -11,6 +11,8 @@
+ #include <stdlib.h>
+ #include <sys/wait.h>
+ #include <time.h>
++#include <scenefx/render/fx_renderer/fx_renderer.h>
++#include <scenefx/types/wlr_scene.h>
+ #include <unistd.h>
+ #include <wayland-server-core.h>
+ #include <wlr/backend.h>
+@@ -51,7 +53,6 @@
+ #include <wlr/types/wlr_primary_selection.h>
+ #include <wlr/types/wlr_primary_selection_v1.h>
+ #include <wlr/types/wlr_relative_pointer_v1.h>
+-#include <wlr/types/wlr_scene.h>
+ #include <wlr/types/wlr_screencopy_v1.h>
+ #include <wlr/types/wlr_seat.h>
+ #include <wlr/types/wlr_server_decoration.h>
+@@ -76,6 +77,7 @@
  #endif
  
  #include "xdg-shell-protocol.h"
@@ -97,8 +137,21 @@ index 4cfd0fd..2372f0a 100644
  #include "util.h"
  
  /* macros */
-@@ -161,6 +162,12 @@ typedef struct {
+@@ -88,8 +90,7 @@
+ /* enums */
+ enum { CurNormal, CurPressed, CurMove, CurResize }; /* cursor */
+ enum { XDGShell, LayerShell, X11 }; /* client types */
+-enum { LyrBg, LyrBottom, LyrTile, LyrFloat, LyrTop, LyrFS, LyrUnmanaged, LyrOverlay,
+-	LyrIMPopup, LyrBlock, NUM_LAYERS }; /* scene layers */
++enum { LyrBg, LyrBlur, LyrBottom, LyrTile, LyrFloat, LyrTop, LyrFS, LyrUnmanaged, LyrOverlay, LyrIMPopup, LyrBlock, NUM_LAYERS }; /* scene layers */
+ enum { AxisUp, AxisRight, AxisDown, AxisLeft };
+ 
+ typedef union {
+@@ -159,8 +160,15 @@ typedef struct {
+ 	unsigned int bw;
+ 	uint32_t tags;
  	int isfloating, isurgent, isfullscreen;
++  struct wlr_scene_blur *blur;
  } Client;
  
 +typedef struct {
@@ -110,7 +163,7 @@ index 4cfd0fd..2372f0a 100644
  typedef struct {
  	uint32_t mod;
  	xkb_keysym_t keysym;
-@@ -205,6 +212,7 @@ typedef struct {
+@@ -205,6 +213,7 @@ typedef struct {
  
  struct Monitor {
  	struct wl_list link;
@@ -118,7 +171,15 @@ index 4cfd0fd..2372f0a 100644
  	struct wlr_output *wlr_output;
  	struct wlr_scene_output *scene_output;
  	struct wlr_scene_rect *fullscreen_bg; /* See createmon() for info */
-@@ -235,6 +243,11 @@ typedef struct {
+@@ -225,6 +234,7 @@ struct Monitor {
+ 	int nmaster;
+ 	char ltsymbol[16];
+ 	int asleep;
++  struct wlr_scene_optimized_blur *blur;
+ };
+ 
+ typedef struct {
+@@ -235,6 +245,11 @@ typedef struct {
  	const Layout *lt;
  	enum wl_output_transform rr;
  	int x, y;
@@ -130,7 +191,7 @@ index 4cfd0fd..2372f0a 100644
  } MonitorRule;
  
  typedef struct {
-@@ -266,6 +279,7 @@ static void arrange(Monitor *m);
+@@ -266,6 +281,7 @@ static void arrange(Monitor *m);
  static void arrangelayer(Monitor *m, struct wl_list *list,
  		struct wlr_box *usable_area, int exclusive);
  static void arrangelayers(Monitor *m);
@@ -138,7 +199,7 @@ index 4cfd0fd..2372f0a 100644
  static void axisnotify(struct wl_listener *listener, void *data);
  static void buttonpress(struct wl_listener *listener, void *data);
  static void capturerequest(struct wl_listener *listener, void *data);
-@@ -303,6 +317,17 @@ static void destroypointerconstraint(struct wl_listener *listener, void *data);
+@@ -303,6 +319,17 @@ static void destroypointerconstraint(struct wl_listener *listener, void *data);
  static void destroysessionlock(struct wl_listener *listener, void *data);
  static void destroykeyboardgroup(struct wl_listener *listener, void *data);
  static Monitor *dirtomon(enum wlr_direction dir);
@@ -156,15 +217,18 @@ index 4cfd0fd..2372f0a 100644
  static void focusclient(Client *c, int lift);
  static void focusmon(const Arg *arg);
  static void focusstack(const Arg *arg);
-@@ -355,6 +380,7 @@ static void startdrag(struct wl_listener *listener, void *data);
+@@ -355,6 +382,10 @@ static void startdrag(struct wl_listener *listener, void *data);
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
  static void tile(Monitor *m);
++static void toggleblur(const Arg *arg);
++static void toggleblurfocused(const Arg *arg);
++static void togglefloating(const Arg *arg);
 +static void togglebar(const Arg *arg);
  static void togglefloating(const Arg *arg);
  static void togglefullscreen(const Arg *arg);
  static void toggletag(const Arg *arg);
-@@ -368,6 +394,7 @@ static void urgent(struct wl_listener *listener, void *data);
+@@ -368,6 +399,7 @@ static void urgent(struct wl_listener *listener, void *data);
  static void view(const Arg *arg);
  static void virtualkeyboard(struct wl_listener *listener, void *data);
  static void virtualpointer(struct wl_listener *listener, void *data);
@@ -172,7 +236,7 @@ index 4cfd0fd..2372f0a 100644
  static Monitor *xytomon(double x, double y);
  static void xytonode(double x, double y, struct wlr_surface **psurface,
  		Client **pc, LayerSurface **pl, double *nx, double *ny);
-@@ -462,6 +489,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
+@@ -462,6 +494,9 @@ static struct wl_listener start_drag = {.notify = startdrag};
  static struct wl_listener new_session_lock = {.notify = locksession};
  static struct wl_listener new_foreign_toplevel_capture_request = {.notify = capturerequest};
  
@@ -182,7 +246,7 @@ index 4cfd0fd..2372f0a 100644
  #ifdef XWAYLAND
  static void activatex11(struct wl_listener *listener, void *data);
  static void associatex11(struct wl_listener *listener, void *data);
-@@ -476,6 +506,9 @@ static struct wl_listener xwayland_ready = {.notify = xwaylandready};
+@@ -476,6 +511,9 @@ static struct wl_listener xwayland_ready = {.notify = xwaylandready};
  static struct wlr_xwayland *xwayland;
  #endif
  
@@ -192,7 +256,7 @@ index 4cfd0fd..2372f0a 100644
  /* configuration, allows nested code to access above variables */
  #include "config.h"
  
-@@ -650,6 +683,27 @@ arrangelayers(Monitor *m)
+@@ -650,6 +688,27 @@ arrangelayers(Monitor *m)
  	}
  }
  
@@ -220,7 +284,7 @@ index 4cfd0fd..2372f0a 100644
  void
  axisnotify(struct wl_listener *listener, void *data)
  {
-@@ -789,12 +843,23 @@ checkidleinhibitor(struct wlr_surface *exclude)
+@@ -789,12 +848,23 @@ checkidleinhibitor(struct wlr_surface *exclude)
  void
  cleanup(void)
  {
@@ -244,7 +308,7 @@ index 4cfd0fd..2372f0a 100644
  	if (child_pid > 0) {
  		kill(-child_pid, SIGTERM);
  		waitpid(child_pid, NULL, 0);
-@@ -823,6 +888,10 @@ cleanupmon(struct wl_listener *listener, void *data)
+@@ -823,6 +893,10 @@ cleanupmon(struct wl_listener *listener, void *data)
  	LayerSurface *l, *tmp;
  	size_t i;
  
@@ -255,7 +319,32 @@ index 4cfd0fd..2372f0a 100644
  	/* m->layers[i] are intentionally not unlinked */
  	for (i = 0; i < LENGTH(m->layers); i++) {
  		wl_list_for_each_safe(l, tmp, &m->layers[i], link)
-@@ -1139,6 +1208,7 @@ createmon(struct wl_listener *listener, void *data)
+@@ -841,6 +915,8 @@ cleanupmon(struct wl_listener *listener, void *data)
+ 
+ 	closemon(m);
+ 	wlr_scene_node_destroy(&m->fullscreen_bg->node);
++  wlr_scene_node_destroy(&m->blur->node);
++  m->blur = NULL;
+ 	free(m);
+ }
+ 
+@@ -949,6 +1025,7 @@ commitlayersurfacenotify(struct wl_listener *listener, void *data)
+ 	}
+ 
+ 	arrangelayers(l->mon);
++	if ((layer_surface->current.layer == ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND) && (l->mon)) wlr_scene_optimized_blur_mark_dirty(l->mon->blur);
+ }
+ 
+ void
+@@ -981,6 +1058,7 @@ commitnotify(struct wl_listener *listener, void *data)
+ 	}
+ 
+ 	resize(c, c->geom, (c->isfloating && !c->isfullscreen));
++	wlr_scene_blur_set_size(c->blur, c->geom.width, c->geom.height);
+ }
+ 
+ void
+@@ -1139,6 +1217,7 @@ createmon(struct wl_listener *listener, void *data)
  	/* This event is raised by the backend when a new output (aka a display or
  	 * monitor) becomes available. */
  	struct wlr_output *wlr_output = data;
@@ -263,7 +352,7 @@ index 4cfd0fd..2372f0a 100644
  	const MonitorRule *r;
  	size_t i;
  	struct wlr_output_state state;
-@@ -1150,6 +1220,8 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1150,6 +1229,8 @@ createmon(struct wl_listener *listener, void *data)
  	m = wlr_output->data = ecalloc(1, sizeof(*m));
  	m->wlr_output = wlr_output;
  
@@ -272,7 +361,7 @@ index 4cfd0fd..2372f0a 100644
  	for (i = 0; i < LENGTH(m->layers); i++)
  		wl_list_init(&m->layers[i]);
  
-@@ -1167,16 +1239,23 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1167,16 +1248,23 @@ createmon(struct wl_listener *listener, void *data)
  			strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, LENGTH(m->ltsymbol));
  			wlr_output_state_set_scale(&state, r->scale);
  			wlr_output_state_set_transform(&state, r->rr);
@@ -302,7 +391,19 @@ index 4cfd0fd..2372f0a 100644
  	/* Set up event listeners */
  	LISTEN(&wlr_output->events.frame, &m->frame, rendermon);
  	LISTEN(&wlr_output->events.destroy, &m->destroy, cleanupmon);
-@@ -1504,6 +1583,199 @@ dirtomon(enum wlr_direction dir)
+@@ -1201,6 +1289,11 @@ createmon(struct wl_listener *listener, void *data)
+ 	m->fullscreen_bg = wlr_scene_rect_create(layers[LyrFS], 0, 0, fullscreen_bg);
+ 	wlr_scene_node_set_enabled(&m->fullscreen_bg->node, 0);
+ 
++  m->blur = wlr_scene_optimized_blur_create(&scene->tree, m->m.width, m->m.height);
++  wlr_scene_node_set_position(&m->blur->node, m->m.x, m->m.y);
++  wlr_scene_node_reparent(&m->blur->node, layers[LyrBlur]);
++  wlr_scene_node_set_enabled(&m->blur->node, blur_enabled);
++
+ 	/* Adds this to the output layout in the order it was configured.
+ 	 *
+ 	 * The output layout utility automatically adds a wl_output global to the
+@@ -1504,6 +1597,199 @@ dirtomon(enum wlr_direction dir)
  	return selmon;
  }
  
@@ -502,7 +603,7 @@ index 4cfd0fd..2372f0a 100644
  void
  focusclient(Client *c, int lift)
  {
-@@ -1673,10 +1945,25 @@ gpureset(struct wl_listener *listener, void *data)
+@@ -1673,10 +1959,25 @@ gpureset(struct wl_listener *listener, void *data)
  void
  handlesig(int signo)
  {
@@ -531,7 +632,19 @@ index 4cfd0fd..2372f0a 100644
  }
  
  void
-@@ -2257,38 +2544,9 @@ void
+@@ -1934,6 +2235,11 @@ mapnotify(struct wl_listener *listener, void *data)
+ 	}
+ 	printstatus();
+ 
++  c->blur = wlr_scene_blur_create(c->scene, c->geom.width, c->geom.height);
++  wlr_scene_node_lower_to_bottom(&c->blur->node);
++  wlr_scene_blur_set_should_only_blur_bottom_layer(c->blur, true);
++  wlr_scene_node_set_enabled(&c->blur->node, blur_enabled);
++
+ unset_fullscreen:
+ 	m = c->mon ? c->mon : xytomon(c->geom.x, c->geom.y);
+ 	wl_list_for_each(w, &clients, link) {
+@@ -2257,38 +2563,9 @@ void
  printstatus(void)
  {
  	Monitor *m = NULL;
@@ -572,7 +685,7 @@ index 4cfd0fd..2372f0a 100644
  }
  
  void
-@@ -2407,6 +2665,7 @@ run(char *startup_cmd)
+@@ -2407,6 +2684,7 @@ run(char *startup_cmd)
  		die("startup: backend_start");
  
  	/* Now that the socket exists and the backend is started, run the startup command */
@@ -580,7 +693,23 @@ index 4cfd0fd..2372f0a 100644
  	if (startup_cmd) {
  		int piperw[2];
  		if (pipe(piperw) < 0)
-@@ -2816,6 +3075,10 @@ setup(void)
+@@ -2631,11 +2909,14 @@ setup(void)
+ 	drag_icon = wlr_scene_tree_create(&scene->tree);
+ 	wlr_scene_node_place_below(&drag_icon->node, &layers[LyrBlock]->node);
+ 
++void wlr_scene_set_blur_data(struct wlr_scene *scene, int num_passes,
++        int radius, float noise, float brightness, float contrast, float saturation);
++
+ 	/* Autocreates a renderer, either Pixman, GLES2 or Vulkan for us. The user
+ 	 * can also specify a renderer using the WLR_RENDERER env var.
+ 	 * The renderer is responsible for defining the various pixel formats it
+ 	 * supports for shared memory, this configures that for clients. */
+-	if (!(drw = wlr_renderer_autocreate(backend)))
++	if (!(drw = fx_renderer_create(backend)))
+ 		die("couldn't create renderer");
+ 	wl_signal_add(&drw->events.lost, &gpu_reset);
+ 
+@@ -2816,6 +3097,10 @@ setup(void)
  	text_input_manager = wlr_text_input_manager_v3_create(dpy);
  	input_method_relay = input_method_relay_create();
  
@@ -591,7 +720,7 @@ index 4cfd0fd..2372f0a 100644
  	/* Make sure XWayland clients don't connect to the parent X server,
  	 * e.g when running in the x11 backend or the wayland backend and the
  	 * compositor has Xwayland support */
-@@ -2913,6 +3176,13 @@ tile(Monitor *m)
+@@ -2913,6 +3198,33 @@ tile(Monitor *m)
  	}
  }
  
@@ -602,10 +731,52 @@ index 4cfd0fd..2372f0a 100644
 +		zdwl_ipc_output_v2_send_toggle_visibility(ipc_output->resource);
 +}
 +
++void
++toggleblur(const Arg *arg)
++{
++	Client *c;
++	Monitor *m = NULL;
++	blur_enabled = !blur_enabled;
++	wl_list_for_each(m, &mons, link)
++		wlr_scene_node_set_enabled(&m->blur->node, blur_enabled);
++	wl_list_for_each(c, &clients, link)
++		wlr_scene_node_set_enabled(&c->blur->node, blur_enabled);
++}
++
++void
++toggleblurfocused(const Arg *arg)
++{
++	Client *sel = focustop(selmon);
++	if (sel && sel->blur)
++		wlr_scene_node_set_enabled(&sel->blur->node, !sel->blur->node.enabled);
++}
++
  void
  togglefloating(const Arg *arg)
  {
-@@ -3206,6 +3476,17 @@ virtualpointer(struct wl_listener *listener, void *data)
+@@ -2977,6 +3289,11 @@ unmaplayersurfacenotify(struct wl_listener *listener, void *data)
+ 		arrangelayers(l->mon);
+ 	if (l->layer_surface->surface == seat->keyboard_state.focused_surface)
+ 		focusclient(focustop(selmon), 1);
++	if (l->layer_surface->surface == seat->keyboard_state.focused_surface)
++		focusclient(focustop(selmon), 1);
++	if ((l->layer_surface->current.layer == ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND) && (l->mon))
++		wlr_scene_optimized_blur_mark_dirty(l->mon->blur);
++	motionnotify(0, NULL, 0, 0, 0, 0);
+ 	motionnotify(0, NULL, 0, 0, 0, 0);
+ }
+ 
+@@ -3083,6 +3400,9 @@ updatemons(struct wl_listener *listener, void *data)
+ 		wlr_scene_node_set_position(&m->fullscreen_bg->node, m->m.x, m->m.y);
+ 		wlr_scene_rect_set_size(m->fullscreen_bg, m->m.width, m->m.height);
+ 
++		wlr_scene_node_set_position(&m->blur->node, m->m.x, m->m.y);
++		wlr_scene_optimized_blur_set_size(m->blur, m->m.width, m->m.height);
++
+ 		if (m->lock_surface) {
+ 			struct wlr_scene_tree *scene_tree = m->lock_surface->surface->data;
+ 			wlr_scene_node_set_position(&scene_tree->node, m->m.x, m->m.y);
+@@ -3206,6 +3526,17 @@ virtualpointer(struct wl_listener *listener, void *data)
  	wlr_seat_set_capabilities(seat, seat->capabilities | WL_SEAT_CAPABILITY_POINTER);
  }
  
