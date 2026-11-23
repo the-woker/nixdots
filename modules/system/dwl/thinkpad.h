@@ -141,6 +141,7 @@ static const char *brightdown[] = { "brightnessctl", "s", "5%-", NULL};
 static const char *play_prev[]      = { "playerctl", "previous", NULL};
 static const char *play_pause[]      = { "playerctl", "play-pause", NULL};
 static const char *play_next[]      = { "playerctl", "next", NULL};
+static const char *grimcmd[]    = { "/bin/sh", "-c", "grim -g \"$(slurp)\" \"$HOME/Screenshots/$(date '+%Y-%m-%d %H:%M:%S').png\"", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
@@ -155,6 +156,7 @@ static const Key keys[] = {
 	{ 0,                         XKB_KEY_F10,                      spawn,            {.v = play_pause} },
 	{ 0,                         XKB_KEY_F11,                      spawn,            {.v = play_next} },
 	{ 0,						 XKB_KEY_XF86AudioPlay,			   spawn,            {.v = play_pause}},
+	{ MODKEY,					 XKB_KEY_s,                        spawn,            {.v = grimcmd} },
 	{ MODKEY,                    XKB_KEY_space,                    spawn,            {.v = menucmd} },
 	{ MODKEY,                    XKB_KEY_w,                        spawn,            {.v = wallcmd} },
 	{ MODKEY,                    XKB_KEY_Return,                   spawn,            {.v = termcmd} },

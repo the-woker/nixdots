@@ -87,7 +87,6 @@ in {
       usbutils
       psmisc
       yt-dlp
-      spotify
       awww
       nvtopPackages.nvidia
       lm_sensors
@@ -112,6 +111,8 @@ in {
       brightnessctl
       smem
       gnumake
+      spotifywm
+      fd
     ]
     ++ (with pkgs.unstable; [
       matuwall
