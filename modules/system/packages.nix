@@ -122,6 +122,7 @@ in {
         newp
         fibpass
         neko
+        nu
       ]
     );
 }

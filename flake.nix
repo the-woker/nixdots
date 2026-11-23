@@ -47,6 +47,7 @@
     nvim.url = "github:the-woker/nvim";
     fetch.url = "github:areofyl/fetch";
     matuwall.url = "github:naurissteins/Matuwall";
+    nu.url = "github:the-woker/nu";
   };
 
   outputs = {

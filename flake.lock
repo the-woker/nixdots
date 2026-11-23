@@ -329,6 +329,22 @@
     },
     "nixpkgs_7": {
       "locked": {
+        "lastModified": 1764521362,
+        "narHash": "sha256-M101xMtWdF1eSD0xhiR8nG8CXRlHmv6V+VoY65Smwf4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "871b9fd269ff6246794583ce4ee1031e1da71895",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_8": {
+      "locked": {
         "lastModified": 1787070829,
         "narHash": "sha256-vXNVDVtvfiQuXthP0NHPFdNvvMTkGpx0UP8oddIWbNk=",
         "owner": "NixOS",
@@ -343,7 +359,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
+    "nixpkgs_9": {
       "locked": {
         "lastModified": 1786719841,
         "narHash": "sha256-QcpQOT0NQEFkI77t+YXPZqDJc35iIodG7zinieOwFUg=",
@@ -359,17 +375,35 @@
         "type": "github"
       }
     },
+    "nu": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1795463193,
+        "narHash": "sha256-wMszJdw97Tt9eszsJ/3skrB3wI1Zz9agPcPH5/IkNAY=",
+        "owner": "the-woker",
+        "repo": "nu",
+        "rev": "86f1d55556e37556753474b01bab331abbfb4039",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-woker",
+        "repo": "nu",
+        "type": "github"
+      }
+    },
     "nvim": {
       "inputs": {
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_8",
         "wrappers": "wrappers"
       },
       "locked": {
-        "lastModified": 1795456468,
-        "narHash": "sha256-YAKtWR2h1WvOzpNErtHikICAbn4Z4W65T0PL7P/U58g=",
+        "lastModified": 1795460101,
+        "narHash": "sha256-3lPFdN4wPTPp+1yFWsOTSPjSYusqQ1XtPkeSaORJr4E=",
         "owner": "the-woker",
         "repo": "nvim",
-        "rev": "123dd1c88c791d6fff2fca622f713013969266c4",
+        "rev": "79c826c12161ccdba9a3384fdfbad473be273a72",
         "type": "github"
       },
       "original": {
@@ -392,6 +426,7 @@
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nu": "nu",
         "nvim": "nvim",
         "sops-nix": "sops-nix",
         "zen-browser": "zen-browser"
@@ -455,7 +490,7 @@
     },
     "wrappers": {
       "inputs": {
-        "nixpkgs": "nixpkgs_8"
+        "nixpkgs": "nixpkgs_9"
       },
       "locked": {
         "lastModified": 1786998037,
