@@ -44,6 +44,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
+	{ "[\\]",     dwindle },
 	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
@@ -127,7 +128,6 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* commands */
 static const char *termcmd[]    = { "ghostty", NULL };
-static const char *menucmd[]    = { "/bin/sh", "-c", "pkill -x wofi || wofi --show drun", NULL };
 static const char *browsercmd[] = { "zen", NULL };
 static const char *wallcmd[]    = { "matuwall", NULL };
 
@@ -144,6 +144,7 @@ static const char *play_pause[]      = { "playerctl", "play-pause", NULL};
 static const char *play_next[]      = { "playerctl", "next", NULL};
 static const char *grimcmd[]    = { "/bin/sh", "-c", "grim -g \"$(slurp)\" \"$HOME/Screenshots/$(date '+%Y-%m-%d %H:%M:%S').png\"", NULL };
 
+#include "shifttag.c"
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
 	/* modifier                  key                               function          argument */
@@ -158,7 +159,7 @@ static const Key keys[] = {
 	{ 0,                         XKB_KEY_F11,                      spawn,            {.v = play_next} },
 	{ 0,						 XKB_KEY_XF86AudioPlay,			   spawn,            {.v = play_pause}},
 	{ MODKEY,					 XKB_KEY_s,                        spawn,            {.v = grimcmd} },
-	{ MODKEY,                    XKB_KEY_space,                    spawn,            {.v = menucmd} },
+	{ MODKEY,                    XKB_KEY_space,                    spawn,            SHCMD("pkill wofi || wofi --show drun") },
 	{ MODKEY,                    XKB_KEY_w,                        spawn,            {.v = wallcmd} },
 	{ MODKEY,                    XKB_KEY_Return,                   spawn,            {.v = termcmd} },
 	{ MODKEY,                    XKB_KEY_b,                        spawn,            {.v = browsercmd} },
@@ -171,7 +172,15 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_h,                        setmfact,         {.f = -0.05f} },
 	{ MODKEY,                    XKB_KEY_l,                        setmfact,         {.f = +0.05f} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,                   zoom,             {0} },
-	{ MODKEY,                    XKB_KEY_Tab,                      view,             {0} },
+	{ MODKEY,                    XKB_KEY_Tab,					   shifttag_occupied,   { .i = 1 } },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Tab,                      shifttag_occupied,   { .i = -1 } },
+	{ MODKEY,                    XKB_KEY_apostrophe,               shifttag_occupied,   { .i = 1 } },
+	{ MODKEY,                    XKB_KEY_apostrophe,               shifttag_occupied,   { .i = 1 } },
+	{ MODKEY,                    XKB_KEY_semicolon,                shifttag_occupied,   { .i = -1 } },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_quotedbl,                 shifttag,            { .i = 1 } },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_colon,                    shifttag,            { .i = -1 } },
+	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_apostrophe,               shifttag_unoccupied, { .i = 1 } },
+	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_semicolon,                shifttag_unoccupied, { .i = -1 } },
 	{ MODKEY,                    XKB_KEY_q,                        killclient,       {0} },
 	{ MODKEY,                    XKB_KEY_t,                        setlayout,        {.v = &layouts[0]} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_f,                        setlayout,        {.v = &layouts[1]} },
@@ -227,6 +236,8 @@ static const Axis axes[] = {
 	/* example of volume control:
 	{ MODKEY, AxisUp,   spawn, SHCMD("volume-up_EXAMPLE") },
 	{ MODKEY, AxisDown, spawn, SHCMD("volume-down_EXAMPLE") }, */
+	{ MODKEY, AxisLeft, shifttag_occupied, { .i = -1 } },
+	{ MODKEY, AxisRight,   shifttag_occupied, { .i = 1 } },
 	{ 0, 0, NULL, {0} },
 	/* does nothing, but the array cannot be empty */
 };
