@@ -54,17 +54,6 @@ in {
         TZDIR = "/etc/zoneinfo";
       };
       siteFunctions = {
-        dwu = ''
-          local dir
-          dir=$(pwd)
-          cd ~/dwl || return 1
-          git add .
-          git commit -m "Update config.def.h"
-          git push
-          cd ~/nixdots
-          nix flake update
-          sudo nixos-rebuild switch --flake ~/nixdots#${settings.hostname}
-        '';
         udots = ''
           cd ~/configs || return 1
           git add .

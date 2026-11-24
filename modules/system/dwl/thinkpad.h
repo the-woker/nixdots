@@ -27,6 +27,7 @@ static int blur_enabled = 1;
 
 /* Autostart */
 static const char *const autostart[] = {
+	"bluetoothctl", "connect", "E8:8F:16:6F:5E:02", NULL,
 	"waybar", NULL,
 	"awww-daemon", NULL,
 	"mpris-proxy", NULL,

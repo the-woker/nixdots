@@ -399,11 +399,11 @@
         "wrappers": "wrappers"
       },
       "locked": {
-        "lastModified": 1795460101,
-        "narHash": "sha256-3lPFdN4wPTPp+1yFWsOTSPjSYusqQ1XtPkeSaORJr4E=",
+        "lastModified": 1795537805,
+        "narHash": "sha256-jqugUyRHJbeWQZo5djYTmYBuVU9KgZahQMPpUu6Jzkw=",
         "owner": "the-woker",
         "repo": "nvim",
-        "rev": "79c826c12161ccdba9a3384fdfbad473be273a72",
+        "rev": "b9c6a750af5fd8457d12fccbcf1172a5cb45704a",
         "type": "github"
       },
       "original": {
@@ -460,11 +460,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794866654,
-        "narHash": "sha256-Y28AMB8lyKjASdJ0BVsR2AqR1cUsVuo8RVVpzHoECho=",
+        "lastModified": 1795471345,
+        "narHash": "sha256-2p8/wnENYHU2Z79Ir/rpq+V1sMI9mSD6xGAlvlbVBUY=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "7c637afdccdf9bcf35c4a2d67b58a77c1fd843a4",
+        "rev": "d5abe5e53200ad48254e8e6bd95e6cef94e66577",
         "type": "github"
       },
       "original": {
