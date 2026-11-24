@@ -112,6 +112,7 @@ in {
       smem
       gnumake
       spotifywm
+      pdfminer
       fd
     ]
     ++ (with pkgs.unstable; [
