@@ -109,7 +109,7 @@ index 13c5322..f19094e 100644
  	{ MODKEY,                    XKB_KEY_comma,       focusmon,         {.i = WLR_DIRECTION_LEFT} },
  	{ MODKEY,                    XKB_KEY_period,      focusmon,         {.i = WLR_DIRECTION_RIGHT} },
 diff --git a/dwl.c b/dwl.c
-index 4cfd0fd..433a27b 100644
+index 4cfd0fd..c13a378 100644
 --- a/dwl.c
 +++ b/dwl.c
 @@ -11,6 +11,8 @@
@@ -328,7 +328,17 @@ index 4cfd0fd..433a27b 100644
  	free(m);
  }
  
-@@ -949,6 +1025,7 @@ commitlayersurfacenotify(struct wl_listener *listener, void *data)
+@@ -919,6 +995,9 @@ commitlayersurfacenotify(struct wl_listener *listener, void *data)
+ 	struct wlr_scene_tree *scene_layer = layers[layermap[layer_surface->current.layer]];
+ 	struct wlr_layer_surface_v1_state old_state;
+ 
++	if ((layer_surface->current.layer == ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND) && (l->mon))
++		wlr_scene_optimized_blur_mark_dirty(l->mon->blur);
++
+ 	if (l->layer_surface->initial_commit) {
+ 		client_set_scale(layer_surface->surface, l->mon->wlr_output->scale);
+ 
+@@ -949,6 +1028,7 @@ commitlayersurfacenotify(struct wl_listener *listener, void *data)
  	}
  
  	arrangelayers(l->mon);
@@ -336,7 +346,7 @@ index 4cfd0fd..433a27b 100644
  }
  
  void
-@@ -981,6 +1058,7 @@ commitnotify(struct wl_listener *listener, void *data)
+@@ -981,6 +1061,7 @@ commitnotify(struct wl_listener *listener, void *data)
  	}
  
  	resize(c, c->geom, (c->isfloating && !c->isfullscreen));
@@ -344,7 +354,7 @@ index 4cfd0fd..433a27b 100644
  }
  
  void
-@@ -1139,6 +1217,7 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1139,6 +1220,7 @@ createmon(struct wl_listener *listener, void *data)
  	/* This event is raised by the backend when a new output (aka a display or
  	 * monitor) becomes available. */
  	struct wlr_output *wlr_output = data;
@@ -352,7 +362,7 @@ index 4cfd0fd..433a27b 100644
  	const MonitorRule *r;
  	size_t i;
  	struct wlr_output_state state;
-@@ -1150,6 +1229,8 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1150,6 +1232,8 @@ createmon(struct wl_listener *listener, void *data)
  	m = wlr_output->data = ecalloc(1, sizeof(*m));
  	m->wlr_output = wlr_output;
  
@@ -361,7 +371,7 @@ index 4cfd0fd..433a27b 100644
  	for (i = 0; i < LENGTH(m->layers); i++)
  		wl_list_init(&m->layers[i]);
  
-@@ -1167,16 +1248,23 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1167,16 +1251,23 @@ createmon(struct wl_listener *listener, void *data)
  			strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, LENGTH(m->ltsymbol));
  			wlr_output_state_set_scale(&state, r->scale);
  			wlr_output_state_set_transform(&state, r->rr);
@@ -391,7 +401,7 @@ index 4cfd0fd..433a27b 100644
  	/* Set up event listeners */
  	LISTEN(&wlr_output->events.frame, &m->frame, rendermon);
  	LISTEN(&wlr_output->events.destroy, &m->destroy, cleanupmon);
-@@ -1201,6 +1289,11 @@ createmon(struct wl_listener *listener, void *data)
+@@ -1201,6 +1292,11 @@ createmon(struct wl_listener *listener, void *data)
  	m->fullscreen_bg = wlr_scene_rect_create(layers[LyrFS], 0, 0, fullscreen_bg);
  	wlr_scene_node_set_enabled(&m->fullscreen_bg->node, 0);
  
@@ -403,7 +413,7 @@ index 4cfd0fd..433a27b 100644
  	/* Adds this to the output layout in the order it was configured.
  	 *
  	 * The output layout utility automatically adds a wl_output global to the
-@@ -1504,6 +1597,199 @@ dirtomon(enum wlr_direction dir)
+@@ -1504,6 +1600,199 @@ dirtomon(enum wlr_direction dir)
  	return selmon;
  }
  
@@ -603,7 +613,7 @@ index 4cfd0fd..433a27b 100644
  void
  focusclient(Client *c, int lift)
  {
-@@ -1673,10 +1959,25 @@ gpureset(struct wl_listener *listener, void *data)
+@@ -1673,10 +1962,25 @@ gpureset(struct wl_listener *listener, void *data)
  void
  handlesig(int signo)
  {
@@ -632,7 +642,7 @@ index 4cfd0fd..433a27b 100644
  }
  
  void
-@@ -1934,6 +2235,11 @@ mapnotify(struct wl_listener *listener, void *data)
+@@ -1934,6 +2238,11 @@ mapnotify(struct wl_listener *listener, void *data)
  	}
  	printstatus();
  
@@ -644,7 +654,7 @@ index 4cfd0fd..433a27b 100644
  unset_fullscreen:
  	m = c->mon ? c->mon : xytomon(c->geom.x, c->geom.y);
  	wl_list_for_each(w, &clients, link) {
-@@ -2257,38 +2563,9 @@ void
+@@ -2257,38 +2566,9 @@ void
  printstatus(void)
  {
  	Monitor *m = NULL;
@@ -685,7 +695,7 @@ index 4cfd0fd..433a27b 100644
  }
  
  void
-@@ -2407,6 +2684,7 @@ run(char *startup_cmd)
+@@ -2407,6 +2687,7 @@ run(char *startup_cmd)
  		die("startup: backend_start");
  
  	/* Now that the socket exists and the backend is started, run the startup command */
@@ -693,7 +703,7 @@ index 4cfd0fd..433a27b 100644
  	if (startup_cmd) {
  		int piperw[2];
  		if (pipe(piperw) < 0)
-@@ -2631,11 +2909,14 @@ setup(void)
+@@ -2631,11 +2912,14 @@ setup(void)
  	drag_icon = wlr_scene_tree_create(&scene->tree);
  	wlr_scene_node_place_below(&drag_icon->node, &layers[LyrBlock]->node);
  
@@ -709,7 +719,7 @@ index 4cfd0fd..433a27b 100644
  		die("couldn't create renderer");
  	wl_signal_add(&drw->events.lost, &gpu_reset);
  
-@@ -2816,6 +3097,10 @@ setup(void)
+@@ -2816,6 +3100,10 @@ setup(void)
  	text_input_manager = wlr_text_input_manager_v3_create(dpy);
  	input_method_relay = input_method_relay_create();
  
@@ -720,7 +730,7 @@ index 4cfd0fd..433a27b 100644
  	/* Make sure XWayland clients don't connect to the parent X server,
  	 * e.g when running in the x11 backend or the wayland backend and the
  	 * compositor has Xwayland support */
-@@ -2913,6 +3198,33 @@ tile(Monitor *m)
+@@ -2913,6 +3201,33 @@ tile(Monitor *m)
  	}
  }
  
@@ -754,7 +764,7 @@ index 4cfd0fd..433a27b 100644
  void
  togglefloating(const Arg *arg)
  {
-@@ -2977,6 +3289,11 @@ unmaplayersurfacenotify(struct wl_listener *listener, void *data)
+@@ -2977,6 +3292,11 @@ unmaplayersurfacenotify(struct wl_listener *listener, void *data)
  		arrangelayers(l->mon);
  	if (l->layer_surface->surface == seat->keyboard_state.focused_surface)
  		focusclient(focustop(selmon), 1);
@@ -766,7 +776,7 @@ index 4cfd0fd..433a27b 100644
  	motionnotify(0, NULL, 0, 0, 0, 0);
  }
  
-@@ -3083,6 +3400,9 @@ updatemons(struct wl_listener *listener, void *data)
+@@ -3083,6 +3403,9 @@ updatemons(struct wl_listener *listener, void *data)
  		wlr_scene_node_set_position(&m->fullscreen_bg->node, m->m.x, m->m.y);
  		wlr_scene_rect_set_size(m->fullscreen_bg, m->m.width, m->m.height);
  
@@ -776,7 +786,7 @@ index 4cfd0fd..433a27b 100644
  		if (m->lock_surface) {
  			struct wlr_scene_tree *scene_tree = m->lock_surface->surface->data;
  			wlr_scene_node_set_position(&scene_tree->node, m->m.x, m->m.y);
-@@ -3206,6 +3526,17 @@ virtualpointer(struct wl_listener *listener, void *data)
+@@ -3206,6 +3529,17 @@ virtualpointer(struct wl_listener *listener, void *data)
  	wlr_seat_set_capabilities(seat, seat->capabilities | WL_SEAT_CAPABILITY_POINTER);
  }
  
