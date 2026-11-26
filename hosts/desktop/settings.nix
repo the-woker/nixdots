@@ -3,6 +3,7 @@
   email = "wokerNM@proton.me";
   hostname = "desktop";
   confBranch = "main";
+  configH = ./desktop.h;
   homeSettings = {
     zen.enable = true;
     zsh.enable = true;

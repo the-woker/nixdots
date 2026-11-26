@@ -3,6 +3,7 @@
   email = "wokerNM@proton.me";
   hostname = "thinkpad";
   confBranch = "thinkpad";
+  configH = ./thinkpad.h;
   homeSettings = {
     zen.enable = true;
     zsh.enable = true;

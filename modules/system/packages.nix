@@ -99,7 +99,6 @@ in {
       lutris
       uxplay
       avahi
-      waybar
       gum
       helvum
       wofi

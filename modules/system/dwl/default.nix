@@ -1,7 +1,4 @@
 {
-  config,
-  lib,
-  inputs,
   pkgs,
   settings,
   ...
@@ -26,12 +23,17 @@
     case "''${1:-}" in
       init)
         rm -rf "$WORK_DIR" && mkdir -p "$WORK_DIR"
+        mkdir -p "$DWL_DIR/patches"
+
+        # Pull raw upstream source from nixpkgs input directly so broken local patches don't block init
         SRC_PATH=$(nix build --no-link --print-out-paths "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl.src")
         cp -r "$SRC_PATH" "$WORK_DIR/source"
         chmod -R u+w "$WORK_DIR/source"
         cd "$WORK_DIR/source"
 
         ${pkgs.git}/bin/git init -q
+        ${pkgs.git}/bin/git config user.email "dwl-patch@local"
+        ${pkgs.git}/bin/git config user.name "dwl-patch"
         ${pkgs.git}/bin/git add .
         ${pkgs.git}/bin/git commit -q -m "base"
 
@@ -52,20 +54,28 @@
 
       build)
         cd "$WORK_DIR/source"
-        cp "$CONFIG_H" config.h
-        eval "$(nix print-dev-env "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl")"
-        buildPhase
+        if [ ! -f "$CONFIG_H" ]; then
+          echo "Error: $CONFIG_H not found."
+          exit 1
+        fi
+        cp -f "$CONFIG_H" config.h
+
+        # Run make inside nix develop without clobbering shell state
+        nix develop "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl" --command make clean dwl
         echo "Build succeeded against $HOST.h! Run 'dwl-patch save' to export combined.patch."
         ;;
 
       save)
         cd "$WORK_DIR/source"
-        rm -f dwl *.o *-protocol.h *-protocol.c config.h *.rej
+        rm -f dwl *.o *-protocol.h *-protocol.c config.h *.rej *.orig
         ${pkgs.git}/bin/git add -A
         BASE_COMMIT=$(${pkgs.git}/bin/git rev-list --max-parents=0 HEAD)
         ${pkgs.git}/bin/git diff "$BASE_COMMIT" > "$COMBINED_PATCH"
-        ${pkgs.git}/bin/git -C "$HOME/nixdots" add "$COMBINED_PATCH" "$DWL_DIR/desktop.h" "$DWL_DIR/thinkpad.h"
-        echo "Saved $COMBINED_PATCH and staged desktop.h and thinkpad.h"
+
+        for f in "$COMBINED_PATCH" "$DWL_DIR/desktop.h" "$DWL_DIR/thinkpad.h"; do
+          [ -f "$f" ] && ${pkgs.git}/bin/git -C "$HOME/nixdots" add "$f"
+        done
+        echo "Saved $COMBINED_PATCH and staged available host headers."
         ;;
 
       *)
@@ -74,21 +84,13 @@
         ;;
     esac
   '';
-
-  dwlStartup = pkgs.writeShellScript "dwl-startup" ''
-    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP=wlroots
-    systemctl --user restart xdg-desktop-portal.service xdg-desktop-portal-gtk.service
-    ${pkgs.waybar}/bin/waybar &
-    ${pkgs.awww}/bin/awww-daemon &
-    ${pkgs.bluez}/bin/mpris-proxy &
-  '';
 in {
   nixpkgs.overlays = [
     (final: prev: {
       dwl =
         (prev.dwl.override {
           stdenv = prev.stdenvAdapters.useMoldLinker prev.stdenv;
-          configH = ./${settings.hostname}.h;
+          configH = settings.configH;
         }).overrideAttrs (oldAttrs: {
           buildInputs =
             (oldAttrs.buildInputs or [])
@@ -120,7 +122,6 @@ in {
 
   programs.waybar.enable = true;
 
-  # [ "$(tty)" = /dev/tty1 ] && exec dwl -s ${dwlStartup}
   environment.loginShellInit = ''
     [ "$(tty)" = /dev/tty1 ] && exec dwl
   '';

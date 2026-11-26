@@ -15,6 +15,7 @@ in {
     ./theme.nix
     ./zsh.nix
     ./zen.nix
+    ./waybar.nix
   ];
   config = lib.mkMerge [
     {
@@ -41,7 +42,6 @@ in {
       };
       xdg.configFile = let
         apps = [
-          # "waybar"
           "ghostty"
           "fastfetch"
           "matuwall"
