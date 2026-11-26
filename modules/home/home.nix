@@ -41,7 +41,7 @@ in {
       };
       xdg.configFile = let
         apps = [
-          "waybar"
+          # "waybar"
           "ghostty"
           "fastfetch"
           "matuwall"

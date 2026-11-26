@@ -1,14 +1,11 @@
 {
   pkgs,
   lib,
-  config,
   settings,
   ...
-}:
-let
+}: let
   cfg = settings.systemSettings.font;
-in
-{
+in {
   config = lib.mkIf cfg.enable {
     fonts = {
       enableDefaultPackages = true;
