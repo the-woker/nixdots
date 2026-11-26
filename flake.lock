@@ -19,11 +19,11 @@
     "configs-thinkpad": {
       "flake": false,
       "locked": {
-        "lastModified": 1794960661,
-        "narHash": "sha256-ivGjS58bEusYeK8NkXpCyR0YINnLgAUYxfUVHmURHbU=",
+        "lastModified": 1795711419,
+        "narHash": "sha256-686gj9fXUCBDKhyjPv+Obr9SACz+3g7QER4+0N9LzVg=",
         "owner": "the-woker",
         "repo": "configs",
-        "rev": "5e841f56b2bd8956338b395a9bfa6e6a3e78ac0e",
+        "rev": "7ee1d8344f356dec47860a89559c36a8598efe7a",
         "type": "github"
       },
       "original": {
