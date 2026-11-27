@@ -10,6 +10,7 @@
     theme.enable = true;
   };
   systemSettings = {
+    tlp.enable = false;
     windows.enable = true;
     disko.enable = true;
     flatpak.enable = true;

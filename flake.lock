@@ -415,11 +415,11 @@
         "wrappers": "wrappers"
       },
       "locked": {
-        "lastModified": 1795537805,
-        "narHash": "sha256-jqugUyRHJbeWQZo5djYTmYBuVU9KgZahQMPpUu6Jzkw=",
+        "lastModified": 1795802363,
+        "narHash": "sha256-gLdxqOU7wCWddUxZ2dAadVn17f+oW6mOc6cZ35rli10=",
         "owner": "the-woker",
         "repo": "nvim",
-        "rev": "b9c6a750af5fd8457d12fccbcf1172a5cb45704a",
+        "rev": "8acb911b9e7e7ac39de3bdb7000fdb08d1addaeb",
         "type": "github"
       },
       "original": {
