@@ -17,7 +17,7 @@
 
     DWL_DIR="$HOME/nixdots/modules/system/dwl"
     WORK_DIR="/tmp/dwl-work"
-    CONFIG_H="$DWL_DIR/$HOST.h"
+    CONFIG_H="$HOME/nixdots/hosts/$HOST/$HOST.h"
     COMBINED_PATCH="$DWL_DIR/patches/combined.patch"
 
     case "''${1:-}" in
@@ -60,8 +60,8 @@
         fi
         cp -f "$CONFIG_H" config.h
 
-        # Run make inside nix develop without clobbering shell state
-        nix develop "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl" --command make clean dwl
+        nix develop "$HOME/nixdots#nixosConfigurations.$HOST.pkgs.dwl" \
+          --command bash -c 'export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${pkgs.wayland-scanner.dev}/lib/pkgconfig"; make clean dwl'
         echo "Build succeeded against $HOST.h! Run 'dwl-patch save' to export combined.patch."
         ;;
 

@@ -115,13 +115,21 @@ LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
 
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
-#define MODKEY WLR_MODIFIER_LOGO
 
+static void
+tagandview(const Arg *arg)
+{
+	tag(arg);
+	view(arg);
+}
+
+#define MODKEY WLR_MODIFIER_LOGO
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                    KEY,            view,            {.ui = 1 << TAG} }, \
-	{ MODKEY|WLR_MODIFIER_CTRL,  KEY,            toggleview,      {.ui = 1 << TAG} }, \
-	{ MODKEY|WLR_MODIFIER_SHIFT, KEY,            tag,             {.ui = 1 << TAG} }, \
-	{ MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,KEY,toggletag,  {.ui = 1 << TAG} }
+	{ MODKEY,                                        KEY, view,       {.ui = 1 << TAG} }, \
+	{ MODKEY|WLR_MODIFIER_CTRL,                      KEY, toggleview, {.ui = 1 << TAG} }, \
+	{ MODKEY|WLR_MODIFIER_SHIFT,                     KEY, tagandview, {.ui = 1 << TAG} }, \
+	{ MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,   KEY, toggletag,  {.ui = 1 << TAG} }
+
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -171,8 +179,6 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_j,                        focusdir,         {.ui = 3} },
 	{ MODKEY,                    XKB_KEY_i,                        incnmaster,       {.i = +1} },
 	{ MODKEY,                    XKB_KEY_d,                        incnmaster,       {.i = -1} },
-	{ MODKEY,                    XKB_KEY_h,                        setmfact,         {.f = -0.05f} },
-	{ MODKEY,                    XKB_KEY_l,                        setmfact,         {.f = +0.05f} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,                   zoom,             {0} },
 	{ MODKEY,                    XKB_KEY_Tab,                      shifttag_occupied,   { .i = 1 } },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Tab,                      shifttag_occupied,   { .i = -1 } },

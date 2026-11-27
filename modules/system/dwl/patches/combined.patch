@@ -43,10 +43,10 @@ index 8304245..10be215 100644
  dist: clean
  	mkdir -p dwl-$(VERSION)
 diff --git a/config.def.h b/config.def.h
-index 13c5322..16c8647 100644
+index 13c5322..782047d 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -18,9 +18,18 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
+@@ -18,13 +18,22 @@ static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You ca
  /* tagging - TAGCOUNT must be no greater than 31 */
  #define TAGCOUNT (9)
  
@@ -63,8 +63,15 @@ index 13c5322..16c8647 100644
 +};
 +
  static const Rule rules[] = {
- 	/* app_id             title       tags mask     isfloating   monitor */
- 	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
+-	/* app_id             title       tags mask     isfloating   monitor */
+-	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
+-	{ "firefox_EXAMPLE",  NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
++	/* app_id             title       tags mask     switchtotag   isfloating   monitor */
++	{ "Gimp_EXAMPLE",     NULL,       0,            0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
++	{ "firefox_EXAMPLE",  NULL,       1 << 8,       1,            0,           -1 }, /* Start on ONLY tag "9" */
+     /* default/example rule: can be changed but cannot be eliminated; at least one rule must exist */
+ };
+ 
 @@ -34,6 +43,7 @@ static const Layout layouts[] = {
  	{ "[]=",      tile },
  	{ "><>",      NULL },    /* no layout function means floating behavior */
