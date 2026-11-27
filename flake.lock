@@ -122,6 +122,22 @@
         "type": "github"
       }
     },
+    "grub": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795755121,
+        "narHash": "sha256-w4CIugmI2QBBWdhevEZDfNFu5URry+03+9V4QoMEDQk=",
+        "owner": "the-woker",
+        "repo": "grub-theme",
+        "rev": "76d24f7d2d2778d693d983db7917785a054b7420",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-woker",
+        "repo": "grub-theme",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -419,6 +435,7 @@
         "disko": "disko",
         "fetch": "fetch",
         "fibpass": "fibpass",
+        "grub": "grub",
         "home-manager": "home-manager",
         "matuwall": "matuwall",
         "neko": "neko",

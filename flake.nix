@@ -48,6 +48,10 @@
     fetch.url = "github:areofyl/fetch";
     matuwall.url = "github:naurissteins/Matuwall";
     nu.url = "github:the-woker/nu";
+    grub = {
+      url = "github:the-woker/grub-theme";
+      flake = false;
+    };
   };
 
   outputs = {

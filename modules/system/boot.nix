@@ -26,20 +26,38 @@
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      systemd-boot.enable = false;
-      limine = {
-        maxGenerations = 5;
+      grub = {
         enable = true;
+        device = "nodev";
         efiSupport = true;
-        resolution = "1920x1080x32";
-        extraEntries = lib.mkIf settings.systemSettings.windows.enable ''
-          /Windows 11
-              protocol: efi
-              path: uuid(3e00b069-3e86-4856-bd70-89f3244c14d4):/EFI/Microsoft/Boot/bootmgfw.efi
-              comment: Boot Windows 11
+        useOSProber = true;
+        default = 0;
+        theme = "${inputs.grub}/berserk";
+        configurationLimit = 5;
+        extraEntries = ''
+          menuentry "Windows" {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root <YOUR-SDA1-UUID>
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
         '';
       };
-      grub.enable = false;
+      systemd-boot.enable = false;
+      # limine = {
+      #   maxGenerations = 5;
+      #   enable = true;
+      #   efiSupport = true;
+      #   resolution = "1920x1080x32";
+      #   extraEntries = lib.mkIf settings.systemSettings.windows.enable ''
+      #     /Windows 11
+      #         protocol: efi
+      #         path: uuid(3e00b069-3e86-4856-bd70-89f3244c14d4):/EFI/Microsoft/Boot/bootmgfw.efi
+      #         comment: Boot Windows 11
+      #   '';
+      # };
     };
   };
 }
