@@ -31,10 +31,6 @@
       url = "github:the-woker/fibpass";
     };
 
-    neko = {
-      url = "github:the-woker/neko-mangowm";
-    };
-
     configs-main = {
       url = "github:the-woker/configs";
       flake = false;

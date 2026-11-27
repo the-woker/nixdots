@@ -121,7 +121,6 @@ in {
       with inputs; [
         newp
         fibpass
-        neko
         nu
       ]
     );
