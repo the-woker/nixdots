@@ -32,9 +32,10 @@
         efiSupport = true;
         useOSProber = true;
         default = 0;
+        splashImage = null;
         theme = "${inputs.grub}/berserk";
         configurationLimit = 5;
-        extraEntries = ''
+        extraEntries = lib.mkIf settings.systemSettings.windows.enable ''
           menuentry "Windows" {
             insmod part_gpt
             insmod fat

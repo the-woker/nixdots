@@ -125,11 +125,11 @@
     "grub": {
       "flake": false,
       "locked": {
-        "lastModified": 1795755121,
-        "narHash": "sha256-w4CIugmI2QBBWdhevEZDfNFu5URry+03+9V4QoMEDQk=",
+        "lastModified": 1795799874,
+        "narHash": "sha256-mwUXDr8olvSV3QJ7FLEV+JTutplpq63yUYpq+8BE8Qo=",
         "owner": "the-woker",
         "repo": "grub-theme",
-        "rev": "76d24f7d2d2778d693d983db7917785a054b7420",
+        "rev": "ae874475a6d2e43ab9cc7bfcafc006a8d8ce49fc",
         "type": "github"
       },
       "original": {
